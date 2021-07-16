@@ -12,50 +12,49 @@ import {
 	SafeAreaView,
 	ScrollView,
 } from 'react-native';
+import axios from 'axios';
 
 // LinkingIOS: https://stackoverflow.com/questions/64522909/universal-linking-ios-where-is-the-xcodeproj-file
 
-interface todoContainerProps {
-	text: string;
+interface groupContainerProps {
+	_id?: string;
+	userIds?: string[];
+	name: string;
+	createdAt: Date;
 }
 
-const TodoContainer = ({ text }: todoContainerProps) => (
-	<View style={styles.todoContainer}>
-		<Text>{text}</Text>
+const GroupContainer = ({
+	_id,
+	userIds,
+	name,
+	createdAt,
+}: groupContainerProps) => (
+	<View style={styles.groupContainer}>
+		<Text>{name}</Text>
+		<Text>{new Date(createdAt).toLocaleString()}</Text>
 	</View>
 );
-
-const randomText = [
-	'Hello heloo...',
-	'Something asdasd',
-	'Dogs or cats? both...',
-	'banana',
-	'asdasd asdasd asdasd',
-	'Long is streaming right now...',
-	'Hello hello this is meeee... Mario',
-	'Random test...',
-	'Another random test...',
-	'Hello heloo...',
-	'Something asdasd',
-	'Dogs or cats? both...',
-	'banana',
-	'asdasd asdasd asdasd',
-	'Long is streaming right now...',
-	'Hello hello this is meeee... Mario',
-	'Random test...',
-	'Another random test...',
-];
 
 const API = 'http://localhost:3000';
 
 export default function App() {
 	const [user, setUser] = useState<{
-		clientId: number;
+		_id: string;
+		clientId: string;
 		name: string;
 		email: string;
 		picture: string;
 		provider: 'google' | 'facebook';
+		createdAt: Date;
 	} | null>(null);
+	const [groups, setGroups] = useState<
+		Array<{
+			_id: string;
+			userIds: string[];
+			name: string;
+			createdAt: Date;
+		}>
+	>([]);
 
 	useEffect(() => {
 		const handleOpenURL = ({ url }: { url: string }) => {
@@ -107,6 +106,35 @@ export default function App() {
 		}
 	};
 
+	const getGroups = async () => {
+		// http://localhost:3000/groups/all/
+		if (user !== null) {
+			try {
+				console.log(user._id);
+				const response = await axios.get(
+					`http://localhost:3000/groups/all/${user._id}`
+				);
+				// const resGroups = JSON.parse(response.data);
+				console.log(response.data);
+				setGroups(response.data);
+			} catch (err) {
+				console.error(err);
+			}
+		} else {
+			console.log('User not found.');
+		}
+	};
+
+	useEffect(() => {
+		if (user) {
+			getGroups();
+		}
+	}, [user]);
+
+	useEffect(() => {
+		console.log(groups);
+	}, [groups]);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<Text style={styles.header}>Secret Project Title</Text>
@@ -148,6 +176,7 @@ export default function App() {
 							/>
 						</View>
 					</View>
+					<Button title="Refresh" onPress={getGroups} />
 					<ScrollView
 						style={{
 							paddingHorizontal: 10,
@@ -155,9 +184,13 @@ export default function App() {
 							borderRadius: 30,
 						}}
 					>
-						{randomText.map((element, index) => (
-							<TodoContainer key={index} text={element} />
-						))}
+						{groups.length !== 0 ? (
+							groups.map((element, index) => (
+								<GroupContainer key={index} {...element} />
+							))
+						) : (
+							<Text>There are no groups.</Text>
+						)}
 					</ScrollView>
 				</>
 			)}
@@ -216,7 +249,7 @@ const styles = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 	},
-	todoContainer: {
+	groupContainer: {
 		width: '100%',
 		padding: 10,
 		marginVertical: 5,
