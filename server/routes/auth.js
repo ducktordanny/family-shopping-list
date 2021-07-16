@@ -8,6 +8,7 @@ router.get('/google',
 router.get('/google/callback',
 	passport.authenticate('google', { failureRedirect: '/error' }),
 	(req, res) => {
+		console.log(req.session);
 		res.redirect(`OAuthLogin://login?user=${JSON.stringify(req.user)}`);
 	});
 
@@ -18,7 +19,6 @@ router.get('/facebook/callback',
 	passport.authenticate('facebook', { failureRedirect: '/error' }),
 	(req, res) => {
 		res.redirect(`OAuthLogin://login?user=${JSON.stringify(req.user)}`);
-	}
-);
+	});
 
 module.exports = router;

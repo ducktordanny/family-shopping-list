@@ -1,17 +1,20 @@
-const { MongoClient } = require('mongodb');
-require('dotenv').config({ path: './config.env' });
+const mongoose = require('mongoose');
+require('dotenv').config({ path: 'config/config.env' });
 
 const URL = process.env.MONGO_CONNECTION;
-const client = new MongoClient(URL);
 
 const connectDB = async () => {
 	try {
-		await client.connect();
+		mongoose.connect(URL, {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			useFindAndModify: false
+		});
 		console.log('Successfully connected to database.');
 	} catch (err) {
-		console.error(err.message);
+		console.error(`Something went wrong: ${err.message}`);
 		process.exit(1);
 	}
 };
 
-connectDB().catch(console.dir);
+module.exports = connectDB;

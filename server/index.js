@@ -1,15 +1,20 @@
 const express = require('express');
+const dotenv = require('dotenv');
 const morgan = require('morgan');
 const session = require('express-session');
 const passport = require('passport');
+const connectDB = require('./config/db');
 
 // config
-require('dotenv').config({ path: './config/config.env' });
-
-const app = express();
+dotenv.config({ path: './config/config.env' });
 
 // passport config
 require('./config/passport')(passport);
+
+connectDB();
+
+const app = express();
+app.use(express.json());
 
 // log
 if (process.env.NODE_ENV === 'developement') {
