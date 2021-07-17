@@ -10,6 +10,10 @@ const productSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	important: {
+		type: Boolean,
+		default: false,
+	},
 	content: {
 		type: String,
 		required: true,
