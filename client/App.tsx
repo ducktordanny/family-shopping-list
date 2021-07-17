@@ -37,9 +37,11 @@ const GroupContainer = ({
 
 const API = 'http://localhost:3000';
 
+// JUST FOR TESTING (will be rewritter)
 export default function App() {
 	const [user, setUser] = useState<{
 		_id: string;
+		token: string;
 		clientId: string;
 		name: string;
 		email: string;
@@ -61,6 +63,7 @@ export default function App() {
 			try {
 				const userString = url.match(/user=([^#]+)/);
 				const userObject = JSON.parse(decodeURI(userString![1]));
+				console.log(userObject);
 				setUser(userObject);
 			} catch (err) {
 				console.error(
@@ -107,21 +110,46 @@ export default function App() {
 	};
 
 	const getGroups = async () => {
-		// http://localhost:3000/groups/all/
 		if (user !== null) {
 			try {
-				console.log(user._id);
 				const response = await axios.get(
-					`http://localhost:3000/groups/all/${user._id}`
+					`http://localhost:3000/groups/all/`,
+					{
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
 				);
-				// const resGroups = JSON.parse(response.data);
-				console.log(response.data);
 				setGroups(response.data);
 			} catch (err) {
 				console.error(err);
 			}
 		} else {
 			console.log('User not found.');
+		}
+	};
+
+	const createGroup = async () => {
+		if (user !== null) {
+			try {
+				const response = await axios.post(
+					'http://localhost:3000/groups/create',
+					{
+						name: `${user.name}: Rawrrrr`,
+					},
+					{
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${user.token}`,
+						},
+					}
+				);
+				console.log(response.data);
+				setGroups((current) => [...current, response.data]);
+			} catch (err) {
+				console.error(err.message);
+			}
 		}
 	};
 
@@ -172,11 +200,22 @@ export default function App() {
 						<View style={styles.buttonContainer}>
 							<Button
 								title="Log out"
-								onPress={() => setUser(null)}
+								onPress={() => {
+									setUser(null);
+									setGroups([]);
+								}}
 							/>
 						</View>
 					</View>
-					<Button title="Refresh" onPress={getGroups} />
+					<View style={styles.buttonContainer}>
+						<Button title="Refresh" onPress={getGroups} />
+					</View>
+					<View style={styles.buttonContainer}>
+						<Button
+							title="Create new group"
+							onPress={createGroup}
+						/>
+					</View>
 					<ScrollView
 						style={{
 							paddingHorizontal: 10,
