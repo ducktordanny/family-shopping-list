@@ -1,3 +1,15 @@
 # Family Shopping List
 
 > Register/login to your account and create a new group/family add members and handle your shopping-list. Every member can see what has to be bought next time and they can edit if it's already bought etc.
+
+## For later:
+
+-   Deploy app to own iphone: https://medium.com/@tewolfe2/deploying-a-react-native-application-to-your-iphone-1d5f9757be48
+-   React-Native with Redux: https://www.imaginarycloud.com/blog/react-native-redux/
+-   Passport-verify: http://www.passportjs.org/packages/passport-verify/
+-   Passport-jwt: https://www.sitepoint.com/spa-social-login-google-facebook/
+
+## Should do later:
+
+-   Validation for new group etc.
+-   Shouldn't morgan be at the devDependencies?
