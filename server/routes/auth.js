@@ -8,7 +8,7 @@ router.get('/google',
 router.get('/google/callback',
 	passport.authenticate('google', { failureRedirect: '/error' }),
 	(req, res) => {
-		console.log(req.session);
+		console.log(req.user);
 		res.redirect(`OAuthLogin://login?user=${JSON.stringify(req.user)}`);
 	});
 

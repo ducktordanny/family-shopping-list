@@ -1,21 +1,32 @@
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const FacebookStrategy = require('passport-facebook');
 const { google, facebook } = require('./strategyOptions');
+const jwt = require('jsonwebtoken');
+require('dotenv').config({ path: 'config/config.env' });
 const User = require('../models/User');
 
 module.exports = (passport) => {
+	const getToken = (user) => jwt.sign(user, process.env.JWT_SECRET);
+
 	const verifyUser = async (userProfile) => {
-		let user = await User.findOne({ clientId: userProfile.clientId });
+		let user = await User.findOne({ clientId: userProfile.clientId }).lean().exec();
 		if (!user) {
-			console.log('Register new user');
-			user = await User.create(userProfile);
+			const doc = await User.create(userProfile);
+			user = doc.toObject();
+			console.log('Added new user.');
+		} else {
+			console.log('User found.');
 		}
+		const payload = {
+			_id: user._id,
+			clientId: user.clientId,
+		};
+		user.token = getToken(payload);
 		return user;
 	};
 
 	passport.use(new GoogleStrategy(google,
-		async (accessToken, refreshToken, profile, done) => {
-			console.log(accessToken, refreshToken);
+		async (_accessToken, _refreshToken, profile, done) => {
 			const { sub: clientId, name, email, picture } = profile._json;
 			let userProfile = {
 				clientId, name, email, picture,
@@ -28,7 +39,7 @@ module.exports = (passport) => {
 	));
 
 	passport.use(new FacebookStrategy(facebook,
-		async (accessToken, refreshToken, profile, done) => {
+		async (_accessToken, _refreshToken, profile, done) => {
 			const { id: clientId, name, email, picture } = profile._json;
 			let userProfile = {
 				clientId, name, email,
