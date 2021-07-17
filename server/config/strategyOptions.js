@@ -11,7 +11,7 @@ const facebook = {
 	clientID: process.env.FB_CLIENT_ID,
 	clientSecret: process.env.FB_CLIENT_SECRET,
 	callbackURL: 'http://localhost:3000/auth/facebook/callback',
-	profileFields: ['id', 'name', 'displayName', 'picture', 'email'],
+	profileFields: ['id', 'name', 'displayName', 'picture.type(large)', 'email'],
 	scope: 'email'
 };
 

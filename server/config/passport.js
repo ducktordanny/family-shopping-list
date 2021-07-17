@@ -25,29 +25,33 @@ module.exports = (passport) => {
 		return user;
 	};
 
+	const getGoogleUserProps = (profile) => {
+		const { sub: clientId, name, email, picture } = profile._json;
+		return {
+			clientId, name, email, picture,
+			provider: profile.provider
+		};
+	};
+
+	const getFacebookUserProps = (profile) => {
+		const { id: clientId, name, email, picture } = profile._json;
+		return {
+			clientId, name, email,
+			picture: picture.data.url,
+			provider: profile.provider
+		};
+	};
+
 	passport.use(new GoogleStrategy(google,
 		async (_accessToken, _refreshToken, profile, done) => {
-			const { sub: clientId, name, email, picture } = profile._json;
-			let userProfile = {
-				clientId, name, email, picture,
-				provider: profile.provider
-			};
-
-			const user = await verifyUser(userProfile);
+			const user = await verifyUser(getGoogleUserProps(profile));
 			return done(null, user);
 		}
 	));
 
 	passport.use(new FacebookStrategy(facebook,
 		async (_accessToken, _refreshToken, profile, done) => {
-			const { id: clientId, name, email, picture } = profile._json;
-			let userProfile = {
-				clientId, name, email,
-				picture: picture.data.url,
-				provider: profile.provider
-			};
-
-			const user = await verifyUser(userProfile);
+			const user = await verifyUser(getFacebookUserProps(profile));
 			return done(null, user);
 		}
 	));
