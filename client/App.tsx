@@ -11,6 +11,8 @@ import {
 	Image,
 	SafeAreaView,
 	ScrollView,
+	KeyboardAvoidingView,
+	TextInput,
 } from 'react-native';
 import axios from 'axios';
 
@@ -57,13 +59,13 @@ export default function App() {
 			createdAt: Date;
 		}>
 	>([]);
+	const [newGroup, setNewGroup] = useState<string>('');
 
 	useEffect(() => {
 		const handleOpenURL = ({ url }: { url: string }) => {
 			try {
 				const userString = url.match(/user=([^#]+)/);
 				const userObject = JSON.parse(decodeURI(userString![1]));
-				console.log(userObject);
 				setUser(userObject);
 			} catch (err) {
 				console.error(
@@ -103,7 +105,7 @@ export default function App() {
 						fromBottom: true,
 					})
 				)
-				.catch((error) => console.log(error.message));
+				.catch((error) => console.error(error.message));
 		} else {
 			Linking.openURL(url);
 		}
@@ -126,17 +128,19 @@ export default function App() {
 				console.error(err);
 			}
 		} else {
-			console.log('User not found.');
+			console.warn('User not found.');
 		}
 	};
 
 	const createGroup = async () => {
 		if (user !== null) {
 			try {
+				if (newGroup === undefined)
+					throw new Error('Group name undefined.');
 				const response = await axios.post(
 					'http://localhost:3000/groups/create',
 					{
-						name: `${user.name}: Rawrrrr`,
+						name: `${newGroup}`,
 					},
 					{
 						headers: {
@@ -145,7 +149,7 @@ export default function App() {
 						},
 					}
 				);
-				console.log(response.data);
+				setNewGroup('');
 				setGroups((current) => [...current, response.data]);
 			} catch (err) {
 				console.error(err.message);
@@ -158,10 +162,6 @@ export default function App() {
 			getGroups();
 		}
 	}, [user]);
-
-	useEffect(() => {
-		console.log(groups);
-	}, [groups]);
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -210,12 +210,15 @@ export default function App() {
 					<View style={styles.buttonContainer}>
 						<Button title="Refresh" onPress={getGroups} />
 					</View>
-					<View style={styles.buttonContainer}>
-						<Button
-							title="Create new group"
-							onPress={createGroup}
+					<KeyboardAvoidingView>
+						<TextInput
+							placeholder="New group name"
+							value={newGroup}
+							onChangeText={(text) => setNewGroup(text)}
+							onSubmitEditing={createGroup}
 						/>
-					</View>
+						<Button title="Create" onPress={createGroup} />
+					</KeyboardAvoidingView>
 					<ScrollView
 						style={{
 							paddingHorizontal: 10,
@@ -228,7 +231,9 @@ export default function App() {
 								<GroupContainer key={index} {...element} />
 							))
 						) : (
-							<Text>There are no groups.</Text>
+							<Text style={{ textAlign: 'center' }}>
+								There are no groups.
+							</Text>
 						)}
 					</ScrollView>
 				</>
