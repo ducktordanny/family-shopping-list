@@ -11,5 +11,6 @@
 
 ## Should do later:
 
--   Validation for new group etc.
--   Shouldn't morgan be at the devDependencies?
+-   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...)
+-   [ ] Create a middleware for accessing to groups and items only if a user is included in that group
+-   [x] Validation for new group etc.
