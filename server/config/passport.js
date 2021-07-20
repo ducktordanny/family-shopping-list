@@ -17,11 +17,8 @@ module.exports = (passport) => {
 		} else {
 			console.log('User found.');
 		}
-		const payload = {
-			_id: user._id,
-			clientId: user.clientId,
-		};
-		user.token = getToken(payload);
+
+		user.token = getToken(user);
 		return user;
 	};
 
