@@ -1,29 +1,76 @@
 const express = require('express');
 const router = express.Router();
-const { authToken } = require('../middleware/auth');
-const mongoose = require('mongoose');
-const User = require('../models/User');
 const Group = require('../models/Group');
 
-router.post('/create/', authToken, async (req, res) => {
-	const { name } = req.body;
-	const userId = req.user._id;
-	const user = await User.findOne({ _id: mongoose.Types.ObjectId(userId) });
-	if (user) {
-		const groups = await Group.create({ userIds: [mongoose.Types.ObjectId(userId)], name });
+/**
+ * create a new group with the name in the body
+ */
+router.post('/create', async (req, res, next) => {
+	try {
+		const { name } = req.body;
+		const userId = req.user._id;
+
+		const query = {
+			userIds: [userId],
+			createdBy: userId,
+			name
+		};
+
+		await Group.validate(query).catch((err) => {
+			res.status(400);
+			next(err.message);
+		});
+		const groups = await Group.create(query);
 		res.json(groups);
-	} else {
-		res.sendStatus(404);
+	} catch (err) {
+		next(err.message);
 	}
 });
 
-router.get('/all/', authToken, async (req, res) => {
-	const groups = await Group.find({ userIds: req.user._id });
-
-	if (groups) {
+/**
+ * list all groups
+ */
+router.get('/all', async (req, res, next) => {
+	try {
+		const groups = await Group.find();
 		res.json(groups);
-	} else {
-		res.sendStatus(404);
+	} catch (err) {
+		next(err.message);
+	}
+});
+
+/**
+ * find all groups where the give user is included
+ */
+router.get('/:userId', async (req, res) => {
+	try {
+		const groups = await Group.find({ userIds: req.params.userId });
+		res.json(groups);
+	} catch (err) {
+		res.status(444).send({ message: err.message });
+	}
+});
+
+/**
+ * if a user authenticated then he/she can joing to a group (with a give group id)
+ */
+router.patch('/join/:groupId', async (req, res, next) => {
+	try {
+		const { groupId } = req.params;
+		const userId = req.user._id;
+
+		const response = await Group.updateOne(
+			{ _id: groupId },
+			{ $addToSet: { userIds: userId } }
+		);
+
+		if (response.nModified === 0) {
+			res.sendStatus(304);
+		} else {
+			res.sendStatus(200);
+		}
+	} catch (err) {
+		next(err.message);
 	}
 });
 

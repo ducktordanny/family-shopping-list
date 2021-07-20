@@ -1,12 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { authToken } = require('../middleware/auth');
-// const User = require('../models/User');
+const User = require('../models/User');
 
-router.post('/', authToken, (req, res) => {
-	// const userId = req.user._id;
-	// const user = 
-	res.sendStatus(200);
+router.get('/', async (req, res, next) => {
+	try {
+		const userId = req.user._id;
+		const result = await User.findById(userId);
+		res.status(200).json(result);
+	} catch (err) {
+		next(err.message);
+	}
 });
 
 module.exports = router;

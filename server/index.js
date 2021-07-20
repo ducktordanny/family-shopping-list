@@ -3,14 +3,15 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const passport = require('passport');
 const connectDB = require('./config/db');
+const { authToken } = require('./middleware/auth');
 
 // config
 dotenv.config({ path: './config/config.env' });
 
+connectDB();
+
 // passport config
 require('./config/passport')(passport);
-
-connectDB();
 
 const app = express();
 app.use(express.json());
@@ -30,8 +31,10 @@ app.use(passport.session());
 app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/app/auth', require('./routes/auth'));
-app.use('/login', require('./routes/login'));
-app.use('/groups', require('./routes/groups'));
+app.use('/login', authToken, require('./routes/login'));
+app.use('/users', authToken, require('./routes/users'));
+app.use('/groups', authToken, require('./routes/groups'));
+app.use('/products', authToken, require('./routes/product'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
