@@ -6,9 +6,14 @@ const groupSchema = new Schema({
 		type: [mongoose.Schema.Types.ObjectId],
 		required: true,
 	},
+	createdBy: {
+		type: mongoose.Schema.Types.ObjectId,
+		required: true,
+	},
 	name: {
 		type: String,
 		required: true,
+		maxLength: 16,
 	},
 	createdAt: {
 		type: Date,

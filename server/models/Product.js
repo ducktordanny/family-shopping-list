@@ -10,19 +10,22 @@ const productSchema = new Schema({
 		type: String,
 		required: true,
 	},
+	content: {
+		type: String,
+		required: true,
+		maxLength: 100,
+	},
 	important: {
 		type: Boolean,
 		default: false,
 	},
-	content: {
-		type: String,
-		required: true,
-	},
 	boughtBy: {
 		type: String,
+		default: null,
 	},
 	boughtAt: {
 		type: Date,
+		default: null,
 	},
 	createdAt: {
 		type: Date,
