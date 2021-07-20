@@ -17,27 +17,58 @@ import {
 import axios from 'axios';
 
 // LinkingIOS: https://stackoverflow.com/questions/64522909/universal-linking-ios-where-is-the-xcodeproj-file
+const API = 'http://localhost:3000';
 
 interface groupContainerProps {
 	_id?: string;
 	userIds?: string[];
 	name: string;
+	createdBy: string;
 	createdAt: Date;
+	token: string;
 }
 
 const GroupContainer = ({
 	_id,
 	userIds,
 	name,
+	createdBy,
 	createdAt,
-}: groupContainerProps) => (
-	<View style={styles.groupContainer}>
-		<Text>{name}</Text>
-		<Text>{new Date(createdAt).toLocaleString()}</Text>
-	</View>
-);
+	token,
+}: groupContainerProps) => {
+	const [nameOfUserWhoCreatedTheGroup, setNameOfUserWhoCreatedTheGroup] =
+		useState<string>('');
+	const [participants, setParticipants] = useState<string[]>([]);
+	useEffect(() => {
+		const getUserName = async () => {
+			const response = await axios.get(`${API}/users/${createdBy}`, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			setNameOfUserWhoCreatedTheGroup(response.data.name);
+		};
+		const getParticipants = async () => {
+			const response = await axios.get(`${API}/users`, {
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: `Bearer ${token}`,
+				},
+			});
+		};
+		getUserName();
+	}, []);
 
-const API = 'http://localhost:3000';
+	return (
+		<View style={styles.groupContainer}>
+			<Text>{name}</Text>
+			<Text>Created by: {nameOfUserWhoCreatedTheGroup}</Text>
+			<Text>Participants: {participants}</Text>
+			<Text>{new Date(createdAt).toLocaleString()}</Text>
+		</View>
+	);
+};
 
 // JUST FOR TESTING (will be rewritter)
 export default function App() {
@@ -56,6 +87,7 @@ export default function App() {
 			_id: string;
 			userIds: string[];
 			name: string;
+			createdBy: string;
 			createdAt: Date;
 		}>
 	>([]);
@@ -115,7 +147,7 @@ export default function App() {
 		if (user !== null) {
 			try {
 				const response = await axios.get(
-					`http://localhost:3000/groups/all/`,
+					`http://localhost:3000/groups/${user._id}`,
 					{
 						headers: {
 							'Content-Type': 'application/json',
@@ -159,6 +191,7 @@ export default function App() {
 
 	useEffect(() => {
 		if (user) {
+			console.log(user.token);
 			getGroups();
 		}
 	}, [user]);
@@ -228,7 +261,11 @@ export default function App() {
 					>
 						{groups.length !== 0 ? (
 							groups.map((element, index) => (
-								<GroupContainer key={index} {...element} />
+								<GroupContainer
+									key={index}
+									{...element}
+									token={user.token}
+								/>
 							))
 						) : (
 							<Text style={{ textAlign: 'center' }}>
