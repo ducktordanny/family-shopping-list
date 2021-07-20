@@ -20,6 +20,7 @@ const userSchema = new Schema({
 	},
 	provider: {
 		type: String,
+		enum: ['google', 'facebook'],
 		required: true,
 	},
 	createdAt: {
