@@ -1,9 +1,14 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 
-interface Props {}
-
-const HomeScreen: React.FC<Props> = () => {
-	return <div>Hello World</div>;
+const HomeScreen = () => {
+	return (
+		<View>
+			<Text style={{ textAlign: 'center', padding: 25 }}>
+				Content Waouw
+			</Text>
+		</View>
+	);
 };
 
 export default HomeScreen;

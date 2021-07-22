@@ -1,9 +1,18 @@
 import React from 'react';
+import { View, Text, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-interface Props {}
+const ProfileScreen = () => {
+	const navigation = useNavigation();
 
-const ProfileScreen: React.FC<Props> = () => {
-	return <div>Hello World</div>;
+	return (
+		<View>
+			<Text style={{ textAlign: 'center', padding: 25 }}>
+				Profile content
+			</Text>
+			<Button title="Home" onPress={() => navigation.navigate('Home')} />
+		</View>
+	);
 };
 
 export default ProfileScreen;
