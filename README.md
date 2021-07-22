@@ -11,9 +11,10 @@
 
 ## Should do later:
 
--   [ ] Redux.
--   [ ] React Navigation for Stacks.
+-   [ ] React Native store user accessToken on client: https://react-native-async-storage.github.io/async-storage/docs/usage
 -   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...).
 -   [ ] Create a middleware for accessing to groups and items only if a user is included in that group.
+-   [x] Redux.
+-   [x] React Navigation for Stacks.
 -   [x] Research for views.
 -   [x] Validation for new group etc.
