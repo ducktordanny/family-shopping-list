@@ -2,9 +2,11 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
 
-import { loginScreenProps } from '../types/screenProps';
+import useLogin from '../hooks/useLogin';
 
-const LoginScreen = ({ token, login }: loginScreenProps) => {
+const LoginScreen = () => {
+	const loginWith = useLogin();
+
 	return (
 		<>
 			<View style={styles.loginContainer}>
@@ -14,13 +16,13 @@ const LoginScreen = ({ token, login }: loginScreenProps) => {
 					<View style={styles.buttonContainer}>
 						<Button
 							title="Login with Google"
-							onPress={() => login('google')}
+							onPress={() => loginWith('google')}
 						/>
 					</View>
 					<View style={styles.buttonContainer}>
 						<Button
 							title="Login with Facebook"
-							onPress={() => login('facebook')}
+							onPress={() => loginWith('facebook')}
 						/>
 					</View>
 				</View>
