@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Linking, Platform } from 'react-native';
 import SafariView from 'react-native-safari-view';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
-import userProps from '../types/userProps';
 import API from '../API';
+import { useStoreActions } from './storeTypedHooks';
 
 /**
  * @returns [token, user, login, logout] as const;
@@ -12,18 +13,28 @@ import API from '../API';
  * With calling the logout function we set them back to null.
  */
 const useLogin = () => {
-	const [token, setToken] = useState<string | null>(null);
-	const [user, setUser] = useState<userProps | null>(null);
+	const { setItem } = useAsyncStorage('@user_token');
+	const setToken = useStoreActions((state) => state.token.setValue);
+	const setUser = useStoreActions((state) => state.user.setValue);
+	const setIsLoggedIn = useStoreActions((state) => state.isLoggedIn.setValue);
 
 	useEffect(() => {
-		const handleOpenURL = ({ url }: { url: string }) => {
+		const handleOpenURL = async ({ url }: { url: string }) => {
 			try {
 				const userString = url.match(/user=([^#]+)/);
 				const userObject = JSON.parse(decodeURI(userString![1]));
+				const { token, id, clientId, name, email, picture } =
+					userObject;
 
-				setToken(userObject.token);
-				delete userObject.token;
-				setUser(userObject);
+				// set token:
+				await setItem(token);
+				setToken(token);
+
+				// set user:
+				setUser({ id, clientId, name, email, picture });
+
+				// set status logged in true:
+				setIsLoggedIn(true);
 			} catch (err) {
 				console.error(
 					`Something went wrong during login. Message: ${err.message}`
@@ -46,12 +57,8 @@ const useLogin = () => {
 		};
 	}, []);
 
-	const login = (provider: 'google' | 'facebook') =>
+	const loginWith = (provider: 'google' | 'facebook') =>
 		openUrl(`${API}/auth/${provider}`);
-	const logout = () => {
-		setUser(null);
-		setToken(null);
-	};
 
 	const openUrl = (url: string) => {
 		if (Platform.OS === 'ios') {
@@ -72,7 +79,7 @@ const useLogin = () => {
 		}
 	};
 
-	return [token, user, login, logout] as const;
+	return loginWith;
 };
 
 export default useLogin;
