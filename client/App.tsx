@@ -1,25 +1,18 @@
-import React from 'react';
-import { Alert, StyleSheet } from 'react-native';
-import { createStore } from 'redux';
-import { Provider } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { StoreProvider } from 'easy-peasy';
 
-import allReducers from './src/reducers';
-import ProfileScreen from './src/screens/ProfileScreen';
-import HomeScreen from './src/screens/HomeScreen';
-
-const store = createStore(allReducers);
-const Stack = createStackNavigator();
+import store from './src/store';
+import ScreenHandler from './src/components/ScreenHandler';
 
 const App = () => {
 	return (
-		<NavigationContainer>
-			<Stack.Navigator>
-				<Stack.Screen name="Profile" component={ProfileScreen} />
-				<Stack.Screen name="Home" component={HomeScreen} />
-			</Stack.Navigator>
-		</NavigationContainer>
+		<StoreProvider store={store}>
+			<NavigationContainer>
+				<ScreenHandler />
+			</NavigationContainer>
+		</StoreProvider>
 	);
 };
 
