@@ -31,7 +31,7 @@ app.use(passport.session());
 app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
 app.use('/app/auth', require('./routes/auth'));
-app.use('/login', authToken, require('./routes/login'));
+app.use('/token', authToken, require('./routes/token'));
 app.use('/users', authToken, require('./routes/users'));
 app.use('/groups', authToken, require('./routes/groups'));
 app.use('/products', authToken, require('./routes/product'));
