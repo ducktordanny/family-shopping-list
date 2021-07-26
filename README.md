@@ -11,9 +11,11 @@
 
 ## Should do later:
 
--   [ ] React Native store user accessToken on client: https://react-native-async-storage.github.io/async-storage/docs/usage
+-   [ ] Basic client design.
 -   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...).
 -   [ ] Create a middleware for accessing to groups and items only if a user is included in that group.
+-   [x] Using easy-peasy might be easier with typescript
+-   [x] React Native store user accessToken on client: https://react-native-async-storage.github.io/async-storage/docs/usage
 -   [x] Redux.
 -   [x] React Navigation for Stacks.
 -   [x] Research for views.
