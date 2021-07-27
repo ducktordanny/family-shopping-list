@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StoreProvider } from 'easy-peasy';
 
@@ -15,19 +14,5 @@ const App = () => {
 		</StoreProvider>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		width: '100%',
-		flex: 1,
-		backgroundColor: '#fff',
-		alignItems: 'center',
-		padding: 10,
-	},
-	title: {
-		fontSize: 28,
-		fontWeight: 'bold',
-	},
-});
 
 export default App;
