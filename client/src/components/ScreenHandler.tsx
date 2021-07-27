@@ -1,17 +1,19 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Image, Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import useToken from '../hooks/useToken';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import ProfileScreen from '../screens/ProfileScreen';
-import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
+import GroupsScreen from '../screens/GroupsScreen';
+import GroupDetailsScreen from '../screens/GroupDetailsScreen';
 
 const Stack = createStackNavigator();
 
 const ScreenHandler = () => {
 	useToken();
+	const userName = useStoreState((state) => state.user.value.name);
 	const isLoggedIn = useStoreState((state) => state.isLoggedIn.value);
 
 	/**
@@ -20,11 +22,19 @@ const ScreenHandler = () => {
 	 */
 
 	return (
-		<Stack.Navigator>
-			{isLoggedIn === true ? (
+		<Stack.Navigator initialRouteName={isLoggedIn ? 'Profile' : 'Login'}>
+			{isLoggedIn ? (
 				<>
 					<Stack.Screen name="Profile" component={ProfileScreen} />
-					<Stack.Screen name="Home" component={HomeScreen} />
+					<Stack.Screen
+						name="Groups"
+						component={GroupsScreen}
+						options={{ headerTitle: `${userName}'s groups` }}
+					/>
+					<Stack.Screen
+						name="Group details"
+						component={GroupDetailsScreen}
+					/>
 				</>
 			) : (
 				<Stack.Screen name="Login" component={LoginScreen} />
