@@ -4,8 +4,7 @@ import axios from 'axios';
 import API from '../API';
 
 /**
- * Look for user token in storage and if it find it then verify it in API and if it's valid then returns true.
- * In any other situation (e.g. error) it returns false.
+ * Look for user token in storage and if it find it then verify it in API and if it is valid then sets everything.
  * @returns boolean
  */
 const useToken = () => {
@@ -16,17 +15,21 @@ const useToken = () => {
 
 	const verifyToken = async () => {
 		try {
-			const storedToken = await getItem();
-			if (storedToken !== null) {
+			const token = await getItem();
+			if (token !== null) {
 				const response = await axios.get(`${API}/token`, {
 					headers: {
-						Authorization: `Bearer ${storedToken}`,
+						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',
 					},
 				});
-				console.log(response.data);
-				const { token, id, clientId, name, email, picture } =
-					response.data;
+				const {
+					_id: id,
+					clientId,
+					name,
+					email,
+					picture,
+				} = response.data;
 
 				// set token:
 				setToken(token);
@@ -37,14 +40,13 @@ const useToken = () => {
 				// set status logged in true:
 				setIsLoggedIn(true);
 			} else {
-				console.log('Token is not founf in storage.');
+				console.log('Token is not found in storage.');
 			}
 		} catch (err) {
 			console.error(err);
 		}
 	};
 
-	// return response
 	verifyToken();
 };
 

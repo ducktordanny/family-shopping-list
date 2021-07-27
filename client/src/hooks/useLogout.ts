@@ -7,19 +7,17 @@ const useLogout = () => {
 	const setUser = useStoreActions((state) => state.user.setValue);
 	const setIsLoggedIn = useStoreActions((state) => state.isLoggedIn.setValue);
 
-	const logout = () => {
+	const logout = async () => {
 		setIsLoggedIn(false);
-		setTimeout(async () => {
-			await removeItem();
-			setToken(undefined);
-			setUser({
-				id: undefined,
-				clientId: undefined,
-				name: undefined,
-				email: undefined,
-				picture: undefined,
-			});
-		}, 250);
+		await removeItem();
+		setToken(undefined);
+		setUser({
+			id: undefined,
+			clientId: undefined,
+			name: undefined,
+			email: undefined,
+			picture: undefined,
+		});
 	};
 
 	return logout;
