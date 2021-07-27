@@ -1,5 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Button, SafeAreaView } from 'react-native';
 
 import useLogin from '../hooks/useLogin';
@@ -9,7 +8,7 @@ const LoginScreen = () => {
 
 	return (
 		<>
-			<View style={styles.loginContainer}>
+			<SafeAreaView style={styles.loginContainer}>
 				<View></View>
 				<Text>Login for displaying your informations</Text>
 				<View style={styles.buttonGroup}>
@@ -26,8 +25,7 @@ const LoginScreen = () => {
 						/>
 					</View>
 				</View>
-			</View>
-			<StatusBar style="auto" />
+			</SafeAreaView>
 		</>
 	);
 };

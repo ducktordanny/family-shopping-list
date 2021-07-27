@@ -1,30 +1,37 @@
 import React from 'react';
-import { View, Text, Button } from 'react-native';
+import { SafeAreaView, Text, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useStoreState } from '../hooks/storeTypedHooks';
+
+import styles from '../styles';
 import useLogout from '../hooks/useLogout';
+import ProfileHeader from '../components/ProfileHeader';
 
 const ProfileScreen = () => {
 	const navigation = useNavigation();
 	const user = useStoreState((state) => state.user.value);
+	const isLoggedIn = useStoreState((state) => state.isLoggedIn.value);
 	const logout = useLogout();
 
-	console.log(user);
-
 	return (
-		<View>
-			<Text style={{ textAlign: 'center', paddingTop: 25 }}>
-				Profile content:
-			</Text>
-			<Text style={{ textAlign: 'center', paddingTop: 25 }}>
-				{user.name}
-			</Text>
-			<Text style={{ textAlign: 'center', padding: 25 }}>
-				{user.email}
-			</Text>
-			<Button title="Home" onPress={() => navigation.navigate('Home')} />
-			<Button title="Logout" onPress={() => logout()} />
-		</View>
+		<SafeAreaView style={styles.container}>
+			{isLoggedIn && (
+				<>
+					<ProfileHeader
+						name={user.name || ''}
+						email={user.email || ''}
+						imageURI={user.picture || ''}
+					/>
+					<Button
+						title="See own groups"
+						onPress={() =>
+							navigation.navigate('Groups', { name: 'Something' })
+						}
+					/>
+					<Button title="Logout" onPress={() => logout()} />
+				</>
+			)}
+		</SafeAreaView>
 	);
 };
 
