@@ -1,9 +1,9 @@
-interface groupProps {
-	_id: string;
+interface GroupProps {
+	id: string;
 	userIds: string[];
-	name: string;
 	createdBy: string;
+	name: string;
 	createdAt: Date;
 }
 
-export default groupProps;
+export default GroupProps;

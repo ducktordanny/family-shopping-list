@@ -1,3 +1,3 @@
-interface productsProps {}
+interface ProductsProps {}
 
-export default productsProps;
+export default ProductsProps;

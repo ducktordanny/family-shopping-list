@@ -1,4 +1,4 @@
-interface userProps {
+interface UserProps {
 	_id: string;
 	clientId: string;
 	name: string;
@@ -8,4 +8,4 @@ interface userProps {
 	createdAt: Date;
 }
 
-export default userProps;
+export default UserProps;
