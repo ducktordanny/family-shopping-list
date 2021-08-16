@@ -11,6 +11,11 @@
 
 ## Should do later:
 
+-   [ ] Header with profile picture and if you click on it then it navigates to your profile.
+-   [ ] CHECK useRoute() AT REACT NAVIGATION
+-   [ ] GroupDetaulsScreen could consist of two parts:
+    -   Top: Group info (who created, when created, rename, leave group, delete group (only the creator))
+    -   Bottom: added products
 -   [ ] Basic client design.
 -   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...).
 -   [ ] Create a middleware for accessing to groups and items only if a user is included in that group.
