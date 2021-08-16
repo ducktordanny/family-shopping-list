@@ -1,13 +1,14 @@
 import React from 'react';
-import { SafeAreaView, ScrollView, Text, Alert } from 'react-native';
+import { SafeAreaView, FlatList, Alert } from 'react-native';
 
 import { useStoreState } from '../hooks/storeTypedHooks';
 import GroupListElement from '../components/GroupListElement';
 import StyledButton from '../components/StyledButton';
 import useGetGroups from '../API/useGetGroups';
 import useCreateGroup from '../API/useCreateGroup';
+import tw from 'tailwind-react-native-classnames';
+import Loading from '../components/Loading';
 
-// TODO: separate these functions into a hook or whatever...
 const GroupsScreen = () => {
 	const user = useStoreState((state) => state.user.value);
 	const token = useStoreState((state) => state.token.value);
@@ -24,26 +25,28 @@ const GroupsScreen = () => {
 	};
 
 	return (
-		<SafeAreaView style={{ justifyContent: 'center' }}>
+		<SafeAreaView style={tw`justify-center`}>
 			{groups !== null ? (
 				<>
-					<ScrollView style={{ borderRadius: 30 }}>
-						{groups.map((element, index) => (
+					<FlatList
+						data={groups}
+						renderItem={({ item }) => (
 							<GroupListElement
-								key={`group-${index}`}
-								name={element.name}
-								createdAt={element.createdAt}
+								id={item.id}
+								name={item.name}
+								createdAt={item.createdAt}
 							/>
-						))}
-					</ScrollView>
+						)}
+						keyExtractor={(item) => `group-${item.id}`}
+					/>
 					<StyledButton
-						style={{ marginBottom: 15 }}
-						title="Create group"
+						style={tw`mb-2`}
+						title="Create new group"
 						onPress={() => handleGroupCreate()}
 					/>
 				</>
 			) : (
-				<Text>Loading...</Text>
+				<Loading />
 			)}
 		</SafeAreaView>
 	);

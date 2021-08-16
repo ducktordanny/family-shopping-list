@@ -1,5 +1,4 @@
 import React from 'react';
-import { View, Text, Image, Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import useToken from '../hooks/useToken';
@@ -8,12 +7,14 @@ import ProfileScreen from '../screens/ProfileScreen';
 import LoginScreen from '../screens/LoginScreen';
 import GroupsScreen from '../screens/GroupsScreen';
 import GroupDetailsScreen from '../screens/GroupDetailsScreen';
+import ProductDetailsScreen from '../screens/ProductDetailsScreen';
 
 const Stack = createStackNavigator();
 
 const ScreenHandler = () => {
 	useToken();
 	const userName = useStoreState((state) => state.user.value.name);
+	const chosenGroup = useStoreState((state) => state.chosenGroup.name);
 	const isLoggedIn = useStoreState((state) => state.isLoggedIn.value);
 
 	/**
@@ -34,6 +35,16 @@ const ScreenHandler = () => {
 					<Stack.Screen
 						name="Group details"
 						component={GroupDetailsScreen}
+						options={{
+							headerTitle: chosenGroup || 'Group details',
+						}}
+					/>
+					<Stack.Screen
+						name="Product details"
+						component={ProductDetailsScreen}
+						options={{
+							headerShown: false,
+						}}
 					/>
 				</>
 			) : (

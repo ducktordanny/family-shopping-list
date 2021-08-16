@@ -1,3 +1,4 @@
+// TODO: make createdBy type UserLessData
 interface GroupProps {
 	id: string;
 	userIds: string[];

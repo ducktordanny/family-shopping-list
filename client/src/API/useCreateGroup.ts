@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import GroupProps from '../types/GroupProps';
-import API from './';
+import API, { getHeaders } from './';
 
 const useCreateGroup = (token: string | undefined) => {
 	const createGroup = async (
@@ -9,17 +9,13 @@ const useCreateGroup = (token: string | undefined) => {
 	): Promise<GroupProps | undefined> => {
 		try {
 			if (token === undefined) throw new Error('User not logged in.');
+
 			const response = await axios.post(
 				`${API}/groups/create`,
 				{
 					name: groupName,
 				},
-				{
-					headers: {
-						Authorization: `Bearer ${token}`,
-						'Content-Type': 'application/json',
-					},
-				}
+				getHeaders(token)
 			);
 			const {
 				_id: id,

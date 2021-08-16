@@ -1,4 +1,4 @@
-interface UserProps {
+interface User {
 	_id: string;
 	clientId: string;
 	name: string;
@@ -8,4 +8,10 @@ interface UserProps {
 	createdAt: Date;
 }
 
-export default UserProps;
+export interface UserWithLessData {
+	_id: string;
+	name: string;
+	picture: string;
+}
+
+export default User;

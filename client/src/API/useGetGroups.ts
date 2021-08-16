@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import API from './';
+import API, { getHeaders } from './';
 import GroupProps from '../types/GroupProps';
 
 const useGetGroups = (id: string | undefined, token: string | undefined) => {
@@ -12,12 +12,10 @@ const useGetGroups = (id: string | undefined, token: string | undefined) => {
 			if (id === undefined || token === undefined)
 				throw new Error('User not logged in.');
 			setGroups(null);
-			const response = await axios.get(`${API}/groups/${id}`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-					'Content-Type': 'application/json',
-				},
-			});
+			const response = await axios.get(
+				`${API}/groups/${id}`,
+				getHeaders(token)
+			);
 			response.data.forEach((element: any) => {
 				const {
 					_id: id,
