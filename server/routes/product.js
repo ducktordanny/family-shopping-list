@@ -1,6 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
+const {
+	getProductByGroupIdWithUsers, getProductById,
+
+} = require('../controller/product');
+const { getUsersForProduct } = require('../controller/users');
+
+router.get('/:id', async (req, res, next) => {
+	try {
+		const { id } = req.params;
+		const response = await getProductById(id);
+
+		res.status(200).json(response);
+	} catch (err) {
+		next(err);
+	}
+});
 
 /**
  * its body requires a groupId and a content
@@ -20,9 +36,9 @@ router.post('/create', async (req, res, next) => {
 			res.status(400);
 			next(err.message);
 		});
-		const response = await Product.create(query);
-		res.status(200);
-		res.json(response);
+		const newProduct = await Product.create(query);
+		const response = await getUsersForProduct(newProduct);
+		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
 	}
@@ -34,8 +50,9 @@ router.post('/create', async (req, res, next) => {
 router.get('/group/:groupId', async (req, res, next) => {
 	try {
 		const { groupId } = req.params;
-		const response = await Product.find({ groupId });
-		res.json(response);
+		const response = await getProductByGroupIdWithUsers(groupId);
+
+		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
 	}
@@ -49,8 +66,7 @@ router.patch('/bought/:productId', async (req, res, next) => {
 		const { productId } = req.params;
 		await Product.findOneAndUpdate({ _id: productId }, { boughtBy: req.user._id, boughtAt: new Date() });
 		const response = await Product.findById(productId);
-		res.status(200);
-		res.json(response);
+		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
 	}
@@ -64,8 +80,7 @@ router.patch('/unbought/:productId', async (req, res, next) => {
 		const { productId } = req.params;
 		await Product.findOneAndUpdate({ _id: productId }, { boughtBy: null, boughtAt: null });
 		const response = await Product.findById(productId);
-		res.status(200);
-		res.json(response);
+		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
 	}
