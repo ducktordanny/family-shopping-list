@@ -11,6 +11,12 @@
 
 ## Should do later:
 
+-   [ ] FIX VULNARABILITY:
+
+    -   https://stackoverflow.com/questions/46334249/which-is-the-correct-method-of-upgrading-react-native-in-your-app
+    -   https://reactnative.dev/docs/upgrading
+    -   https://github.com/react-native-community/cli
+
 -   [ ] Header with profile picture and if you click on it then it navigates to your profile.
 -   [ ] CHECK useRoute() AT REACT NAVIGATION
 -   [ ] GroupDetaulsScreen could consist of two parts:
