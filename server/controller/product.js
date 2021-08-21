@@ -9,7 +9,11 @@ const getProductById = async (id) => {
 };
 
 const getProductByGroupIdWithUsers = async (id) => {
-	const products = await Product.find({ groupId: id });
+	const products = await Product.find({ groupId: id }, [
+		'_id', 'content', 'important',
+		'addedBy', 'boughtBy',
+		'boughtAt', 'createdAt'
+	]);
 	const response = products.map(getUsersForProduct);
 
 	return await Promise.all(response);

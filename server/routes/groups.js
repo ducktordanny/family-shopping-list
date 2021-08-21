@@ -7,21 +7,23 @@ const Group = require('../models/Group');
  */
 router.post('/create', async (req, res, next) => {
 	try {
-		const { name } = req.body;
+		const { name: newGroupName } = req.body;
 		const userId = req.user._id;
 
 		const query = {
 			userIds: [userId],
 			createdBy: userId,
-			name
+			name: newGroupName,
 		};
 
 		await Group.validate(query).catch((err) => {
 			res.status(400);
 			next(err.message);
 		});
-		const groups = await Group.create(query);
-		res.json(groups);
+		const group = await Group.create(query);
+
+		const { _id, userIds, createdBy, name, createdAt } = group;
+		res.json({ _id, userIds, createdBy, name, createdAt });
 	} catch (err) {
 		next(err.message);
 	}
@@ -44,7 +46,8 @@ router.get('/all', async (req, res, next) => {
  */
 router.get('/:userId', async (req, res) => {
 	try {
-		const groups = await Group.find({ userIds: req.params.userId });
+		const groups = await Group.find({ userIds: req.params.userId },
+			['_id', 'userIds', 'createdBy', 'name', 'createdAt']);
 		res.json(groups);
 	} catch (err) {
 		res.status(444).send({ message: err.message });
