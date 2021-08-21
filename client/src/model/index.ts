@@ -1,23 +1,14 @@
-import isLoggedInModel, { IsLoggedInModel } from './isLoggedIn';
 import userModel, { UserModel } from './user';
-import tokenModel, { TokenModel } from './token';
-import chosenGroupModel, { ChosenGroupModel } from './chosenGroup';
-import chosenProductModel, { ChosenProductModel } from './chosenProduct';
+import themeModel, { ThemeModel } from './theme';
 
 export interface StoreModel {
-	isLoggedIn: IsLoggedInModel;
 	user: UserModel;
-	token: TokenModel;
-	chosenGroup: ChosenGroupModel;
-	chosenProduct: ChosenProductModel;
+	theme: ThemeModel;
 }
 
 const storeModel: StoreModel = {
-	isLoggedIn: isLoggedInModel,
 	user: userModel,
-	token: tokenModel,
-	chosenGroup: chosenGroupModel,
-	chosenProduct: chosenProductModel,
+	theme: themeModel,
 };
 
 export default storeModel;

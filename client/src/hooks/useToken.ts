@@ -9,9 +9,9 @@ import API from '../API';
  */
 const useToken = () => {
 	const { getItem } = useAsyncStorage('@user_token');
-	const setToken = useStoreActions((state) => state.token.setValue);
-	const setUser = useStoreActions((state) => state.user.setValue);
-	const setIsLoggedIn = useStoreActions((state) => state.isLoggedIn.setValue);
+	const { setToken, setUser, setIsLogged } = useStoreActions(
+		state => state.user,
+	);
 
 	const verifyToken = async () => {
 		try {
@@ -23,13 +23,7 @@ const useToken = () => {
 						'Content-Type': 'application/json',
 					},
 				});
-				const {
-					_id: id,
-					clientId,
-					name,
-					email,
-					picture,
-				} = response.data;
+				const { _id: id, clientId, name, email, picture } = response.data;
 
 				// set token:
 				setToken(token);
@@ -38,7 +32,7 @@ const useToken = () => {
 				setUser({ id, clientId, name, email, picture });
 
 				// set status logged in true:
-				setIsLoggedIn(true);
+				setIsLogged(true);
 			} else {
 				console.log('Token is not found in storage.');
 			}

@@ -3,12 +3,12 @@ import { Button, Image, SafeAreaView, Text } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import useOneProduct from '../API/useOneProduct';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import Loading from '../components/Loading';
 
 const ProductDetailsScreen = () => {
-	const token = useStoreState((state) => state.token.value);
-	const productId = useStoreState((state) => state.chosenProduct.id);
+	const token = useStoreState(state => state.token.value);
+	const productId = useStoreState(state => state.chosenProduct.id);
 	const product = useOneProduct(token, productId);
 	const navigation = useNavigation();
 
@@ -16,9 +16,7 @@ const ProductDetailsScreen = () => {
 		<SafeAreaView style={tw`bg-white h-full items-center`}>
 			{product !== null ? (
 				<>
-					<Text style={tw`text-2xl font-bold`}>
-						{product.content}
-					</Text>
+					<Text style={tw`text-2xl font-bold`}>{product.content}</Text>
 					<Text style={tw`text-xl`}>Added by:</Text>
 					<Image
 						style={{
@@ -33,8 +31,7 @@ const ProductDetailsScreen = () => {
 					/>
 					<Text style={tw`text-lg`}>{product.addedBy.name}</Text>
 					<Text style={tw`text-xl`}>
-						Created at{' '}
-						{new Date(product.createdAt).toLocaleString()}
+						Created at {new Date(product.createdAt).toLocaleString()}
 					</Text>
 					{product.important && <Text style={tw``}>Important!</Text>}
 					<Button

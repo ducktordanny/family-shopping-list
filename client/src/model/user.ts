@@ -1,6 +1,9 @@
 import { Action, action } from 'easy-peasy';
 
-export interface UserValueInterface {
+type TokenValueType = string | undefined;
+type IsLoggedValueType = boolean;
+
+interface UserValueModel {
 	id: string | undefined;
 	clientId: string | undefined;
 	name: string | undefined;
@@ -8,21 +11,39 @@ export interface UserValueInterface {
 	picture: string | undefined;
 }
 
-export interface UserModel {
-	value: UserValueInterface;
-	setValue: Action<UserModel, UserValueInterface>;
+interface TokenValueModel {
+	token: TokenValueType;
+}
+
+interface IsLoggedValueModel {
+	isLogged: IsLoggedValueType;
+}
+
+export interface UserModel
+	extends UserValueModel,
+		TokenValueModel,
+		IsLoggedValueModel {
+	setUser: Action<UserModel, UserValueModel>;
+	setToken: Action<UserModel, TokenValueType>;
+	setIsLogged: Action<UserModel, IsLoggedValueType>;
 }
 
 const userModel: UserModel = {
-	value: {
-		id: undefined,
-		clientId: undefined,
-		name: undefined,
-		email: undefined,
-		picture: undefined,
-	},
-	setValue: action((state, payload) => {
-		state.value = payload;
+	id: undefined,
+	clientId: undefined,
+	name: undefined,
+	email: undefined,
+	picture: undefined,
+	token: undefined,
+	isLogged: false,
+	setUser: action((state, payload) => {
+		state = { ...state, ...payload };
+	}),
+	setToken: action((state, payload) => {
+		state.token = payload;
+	}),
+	setIsLogged: action((state, payload) => {
+		state.isLogged = payload;
 	}),
 };
 

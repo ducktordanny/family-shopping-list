@@ -14,17 +14,16 @@ import { useStoreActions } from './storeTypedHooks';
  */
 const useLogin = () => {
 	const { setItem } = useAsyncStorage('@user_token');
-	const setToken = useStoreActions((state) => state.token.setValue);
-	const setUser = useStoreActions((state) => state.user.setValue);
-	const setIsLoggedIn = useStoreActions((state) => state.isLoggedIn.setValue);
+	const { setToken, setUser, setIsLogged } = useStoreActions(
+		state => state.user,
+	);
 
 	useEffect(() => {
 		const handleOpenURL = async ({ url }: { url: string }) => {
 			try {
 				const userString = url.match(/user=([^#]+)/);
 				const userObject = JSON.parse(decodeURI(userString![1]));
-				const { token, id, clientId, name, email, picture } =
-					userObject;
+				const { token, id, clientId, name, email, picture } = userObject;
 
 				// set token:
 				await setItem(token);
@@ -34,10 +33,10 @@ const useLogin = () => {
 				setUser({ id, clientId, name, email, picture });
 
 				// set status logged in true:
-				setIsLoggedIn(true);
+				setIsLogged(true);
 			} catch (err) {
 				console.error(
-					`Something went wrong during login. Message: ${err.message}`
+					`Something went wrong during login. Message: ${err.message}`,
 				);
 			}
 
@@ -46,7 +45,7 @@ const useLogin = () => {
 
 		Linking.addEventListener('url', handleOpenURL);
 		// Launched from an external URL
-		Linking.getInitialURL().then((url) => {
+		Linking.getInitialURL().then(url => {
 			if (url) {
 				handleOpenURL({ url });
 			}
@@ -67,12 +66,12 @@ const useLogin = () => {
 					SafariView.show({
 						url,
 						fromBottom: true,
-					})
+					}),
 				)
-				.catch((err) =>
+				.catch(err =>
 					console.error(
-						`Something went wrong during login. Message: ${err.message}`
-					)
+						`Something went wrong during login. Message: ${err.message}`,
+					),
 				);
 		} else {
 			Linking.openURL(url);
