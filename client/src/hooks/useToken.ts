@@ -23,17 +23,26 @@ const useToken = () => {
 						'Content-Type': 'application/json',
 					},
 				});
-				const { _id: id, clientId, name, email, picture } = response.data;
+				const {
+					_id: id,
+					clientId,
+					name,
+					email,
+					picture,
+					provider,
+					createdAt,
+				} = response.data;
 
 				// set token:
 				setToken(token);
 
 				// set user:
-				setUser({ id, clientId, name, email, picture });
+				setUser({ id, clientId, name, email, picture, provider, createdAt });
 
 				// set status logged in true:
 				setIsLogged(true);
 			} else {
+				setIsLogged(false);
 				console.log('Token is not found in storage.');
 			}
 		} catch (err) {

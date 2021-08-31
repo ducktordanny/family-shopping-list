@@ -1,7 +1,7 @@
 import { Action, action } from 'easy-peasy';
 
 type TokenValueType = string | undefined;
-type IsLoggedValueType = boolean;
+type IsLoggedValueType = boolean | undefined;
 
 interface UserValueModel {
 	id: string | undefined;
@@ -9,6 +9,8 @@ interface UserValueModel {
 	name: string | undefined;
 	email: string | undefined;
 	picture: string | undefined;
+	provider: 'google' | 'facebook' | undefined;
+	createdAt: string | undefined;
 }
 
 interface TokenValueModel {
@@ -34,10 +36,18 @@ const userModel: UserModel = {
 	name: undefined,
 	email: undefined,
 	picture: undefined,
+	provider: undefined,
+	createdAt: undefined,
 	token: undefined,
-	isLogged: false,
+	isLogged: undefined,
 	setUser: action((state, payload) => {
-		state = { ...state, ...payload };
+		state.id = payload.id;
+		state.clientId = payload.clientId;
+		state.name = payload.name;
+		state.email = payload.email;
+		state.picture = payload.picture;
+		state.provider = payload.provider;
+		state.createdAt = payload.createdAt;
 	}),
 	setToken: action((state, payload) => {
 		state.token = payload;

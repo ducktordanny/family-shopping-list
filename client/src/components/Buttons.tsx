@@ -2,8 +2,6 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import { Theme } from '@react-navigation/native';
 import colors from '../theme/colors';
-import { SvgUri } from 'react-native-svg';
-import API from '../API';
 
 interface ButtonProps {
 	label: string;
@@ -11,20 +9,27 @@ interface ButtonProps {
 	onPress?: () => void;
 }
 
-export const OnlyLabelButton = ({ label, theme, onPress }: ButtonProps) => (
+export const LabelButton = ({ label, theme, onPress }: ButtonProps) => (
 	<TouchableOpacity onPress={() => onPress && onPress()}>
-		<View
-			style={[styles.buttonContainer, { backgroundColor: theme.colors.card }]}>
+		<View style={styles.buttonContainer}>
 			<Text style={styles.buttonLabel}>{label}</Text>
 		</View>
 	</TouchableOpacity>
 );
 
-interface IconProps extends ButtonProps {
-	icon: 'arrow' | 'crossed' | 'plus' | 'pipe' | 'google' | 'facebook';
+import { Icons } from '../types/Icons';
+import Icon from './Icon';
+
+interface IconLabelButtonProps extends ButtonProps {
+	icon: Icons;
 }
 
-export const IconLabelButton = ({ label, theme, icon, onPress }: IconProps) => {
+export const IconLabelButton = ({
+	label,
+	theme,
+	icon,
+	onPress,
+}: IconLabelButtonProps) => {
 	return (
 		<TouchableOpacity onPress={() => onPress && onPress()}>
 			<View
@@ -32,7 +37,7 @@ export const IconLabelButton = ({ label, theme, icon, onPress }: IconProps) => {
 					styles.buttonContainer,
 					{ backgroundColor: theme.colors.card },
 				]}>
-				<SvgUri uri={`${API}/assets/${icon}.svg`} width={15} height={15} />
+				<Icon icon={icon} />
 				<Text style={[styles.buttonLabel, { paddingLeft: 5 }]}>{label}</Text>
 			</View>
 		</TouchableOpacity>

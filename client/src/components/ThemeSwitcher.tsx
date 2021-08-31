@@ -14,16 +14,17 @@ const ThemeSwitcher = ({ style }: ThemeSwitcherProps) => {
 
 	const handleThemeSwitch = () => {
 		setDark(!dark);
+		// TODO: implement theme mode changing
 		console.log(`Should change theme to ${dark ? 'dark' : 'light'}.`);
 	};
 
-	return dark ? (
+	return (
 		<TouchableOpacity onPress={() => handleThemeSwitch()}>
-			<ToLightMode style={style} />
-		</TouchableOpacity>
-	) : (
-		<TouchableOpacity onPress={() => handleThemeSwitch()}>
-			<ToDarkMode style={style} />
+			{dark ? (
+				<ToLightMode style={style} width={20} height={20} />
+			) : (
+				<ToDarkMode style={style} width={20} height={20} />
+			)}
 		</TouchableOpacity>
 	);
 };

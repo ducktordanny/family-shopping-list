@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {
-	ViewProps,
 	SafeAreaView,
 	View,
 	StyleSheet,
@@ -42,8 +41,8 @@ const styles = StyleSheet.create({
 	mainContainer: {
 		width: '100%',
 		minHeight: 44,
-		borderBottomLeftRadius: 15,
-		borderBottomRightRadius: 15,
+		borderBottomLeftRadius: 30,
+		borderBottomRightRadius: 30,
 	},
 	contentContainer: {
 		padding: 20,

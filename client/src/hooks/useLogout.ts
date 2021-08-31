@@ -3,12 +3,12 @@ import { useStoreActions } from '../hooks/storeTypedHooks';
 
 const useLogout = () => {
 	const { removeItem } = useAsyncStorage('@user_token');
-	const setToken = useStoreActions((state) => state.token.setValue);
-	const setUser = useStoreActions((state) => state.user.setValue);
-	const setIsLoggedIn = useStoreActions((state) => state.isLoggedIn.setValue);
+	const { setToken, setUser, setIsLogged } = useStoreActions(
+		state => state.user,
+	);
 
 	const logout = async () => {
-		setIsLoggedIn(false);
+		setIsLogged(false);
 		await removeItem();
 		setToken(undefined);
 		setUser({
@@ -17,6 +17,8 @@ const useLogout = () => {
 			name: undefined,
 			email: undefined,
 			picture: undefined,
+			provider: undefined,
+			createdAt: undefined,
 		});
 	};
 

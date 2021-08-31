@@ -23,14 +23,14 @@ const useLogin = () => {
 			try {
 				const userString = url.match(/user=([^#]+)/);
 				const userObject = JSON.parse(decodeURI(userString![1]));
-				const { token, id, clientId, name, email, picture } = userObject;
+				const { token } = userObject;
 
 				// set token:
 				await setItem(token);
 				setToken(token);
 
 				// set user:
-				setUser({ id, clientId, name, email, picture });
+				setUser(userObject);
 
 				// set status logged in true:
 				setIsLogged(true);
