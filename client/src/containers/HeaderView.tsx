@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
 	mainContainer: {
 		width: '100%',
 		minHeight: 44,
-		borderBottomLeftRadius: 30,
-		borderBottomRightRadius: 30,
+		borderBottomLeftRadius: 20,
+		borderBottomRightRadius: 20,
 	},
 	contentContainer: {
 		padding: 20,

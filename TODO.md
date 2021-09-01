@@ -25,6 +25,8 @@
 -   [x] React Navigation for Stacks.
 -   [x] Research for views.
 -   [x] Validation for new group etc.
+-   [ ] Deal with device rotation.
+-   [ ] Should add ErrorHandling Component to client side.
 
 ## For later:
 
