@@ -27,9 +27,6 @@ app.set('view engine', 'ejs');
 app.use(passport.initialize());
 app.use(passport.session());
 
-// get icons
-app.use('/assets', express.static('./assets'));
-
 // routes
 app.use('/', require('./routes'));
 app.use('/auth', require('./routes/auth'));
