@@ -1,82 +1,147 @@
 import React from 'react';
-import {
-	SafeAreaView,
-	TouchableOpacity,
-	View,
-	Image,
-	Text,
-} from 'react-native';
+import { SafeAreaView, FlatList, View, Image, Alert } from 'react-native';
 import { useTheme } from '@react-navigation/native';
-// import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { useStoreState } from '../hooks/storeTypedHooks';
 
-import styles from '../styles';
-import useLogout from '../hooks/useLogout';
+import globStyles from '../styles';
 import HeaderView from '../containers/HeaderView';
 import tw from 'tailwind-react-native-classnames';
 import ThemeSwitcher from '../components/ThemeSwitcher';
-import Icon from '../components/Icon';
+
+import { Title, SubTitle, Label } from '../components/Texts';
+import Logout from '../components/Logout';
+import GroupCard from '../components/GroupCard';
+import { IconLabelButton } from '../components/Buttons';
+import useGroups from '../API/useGroups';
+import { capitalizeFirst } from '../lib/strings';
+import useCreateGroup from '../API/useCreateGroup';
+import Loading from '../components/Loading';
+
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/NavigationProps';
+import useJoin from '../API/useJoin';
+
+type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
+type ProfileScreenNavigationProp = Props['navigation'];
 
 const ProfileScreen = () => {
-	// const navigation = useNavigation();
+	const navigation = useNavigation<ProfileScreenNavigationProp>();
 	const user = useStoreState(state => state.user);
-	const logout = useLogout();
+	const [groups, addGroup] = useGroups(user.id, user.token);
+	const createGroup = useCreateGroup(user.token);
+	const joinTo = useJoin(user.token);
 	const theme = useTheme();
 
-	// TODO: make styled components for easier usage
-	// TODO: make group card component
+	const createGroupTrigger = () => {
+		Alert.prompt('The name of the new group:', undefined, [
+			{ text: 'Cancel', style: 'destructive' },
+			{
+				text: 'Create',
+				onPress: async name => {
+					try {
+						if (name === undefined || name?.trim() === '')
+							throw new Error('Invlaid name.');
+						const newGroup = await createGroup(name);
+						if (newGroup !== undefined) {
+							addGroup(newGroup);
+						}
+					} catch (err) {
+						console.log('Create group:', err.message);
+					}
+				},
+			},
+		]);
+	};
+
+	const joinToGroup = () => {
+		Alert.prompt('Join', "ID of the group where you'd like to join: ", [
+			{ text: 'Cancel', style: 'destructive' },
+			{
+				text: 'Join',
+				onPress: async groupId => {
+					try {
+						const newGroup = await joinTo(groupId);
+						if (newGroup !== undefined) {
+							addGroup(newGroup);
+						}
+					} catch (err) {
+						console.log(err);
+					}
+				},
+			},
+		]);
+	};
+
+	const navigateTo = (groupId: string) => {
+		console.log(groupId);
+		navigation.navigate('Group', { groupId });
+	};
 
 	return (
 		<>
 			<HeaderView style={tw`flex-row justify-between`}>
-				<TouchableOpacity onPress={() => logout()}>
-					<Icon style={tw`absolute top-0 left-0`} icon="logout" />
-				</TouchableOpacity>
+				<Logout />
 				<View style={tw`items-center`}>
 					<Image
-						style={[tw`rounded-full`, { width: 75, height: 75 }]}
+						style={[tw`rounded-full`, { width: 60, height: 60 }]}
 						source={{
 							uri: user.picture || 'https://i.imgur.com/Yrz6oBC.png',
 						}}
 					/>
-					<Text
-						style={[
-							{
-								marginTop: 20,
-								fontSize: 24,
-								fontWeight: 'bold',
-								color: theme.colors.text,
-							},
-						]}>
-						{user.name}
-					</Text>
-					<Text
-						style={[{ marginTop: 5, fontSize: 14, color: theme.colors.text }]}>
-						Logged in via {user.provider || '-'}
-					</Text>
-					<Text
-						style={[{ marginTop: 5, fontSize: 14, color: theme.colors.text }]}>
-						{user.email}
-					</Text>
-					<Text
-						style={[
-							{
-								marginTop: 20,
-								fontSize: 18,
-								fontWeight: 'bold',
-								color: theme.colors.text,
-							},
-						]}>
-						Member since
-					</Text>
-					<Text
-						style={[{ marginTop: 5, fontSize: 14, color: theme.colors.text }]}>
-						{new Date(user.createdAt || '').toDateString()}
-					</Text>
+					<Title>{user.name}</Title>
+					<Label>Logged in via {capitalizeFirst(user.provider || '')}</Label>
+					<Label>{user.email}</Label>
+					<SubTitle>Member since</SubTitle>
+					<Label>{new Date(user.createdAt || '').toDateString()}</Label>
 				</View>
 				<ThemeSwitcher style={tw`absolute top-0 right-0`} />
 			</HeaderView>
-			<SafeAreaView style={styles.container}></SafeAreaView>
+
+			<SafeAreaView style={[tw`justify-between`, globStyles.container]}>
+				{groups !== null ? (
+					// if there was a group check:
+					groups?.length > 0 ? (
+						<FlatList
+							style={{
+								paddingTop: 15,
+								paddingHorizontal: 15,
+								width: '100%',
+							}}
+							data={groups}
+							renderItem={({ item }) => (
+								<GroupCard
+									name={item.name}
+									members={item.userIds.length}
+									onPress={() => navigateTo(item._id)}
+								/>
+							)}
+							keyExtractor={item => item._id}
+						/>
+					) : (
+						<Label style={{ textAlign: 'center', paddingTop: 15 }}>
+							You have no groups...
+						</Label>
+					)
+				) : (
+					// waiting for checking if there are any groups
+					<Loading />
+				)}
+				<View style={tw`flex-row justify-center`}>
+					<IconLabelButton
+						label="Create group"
+						icon="plus"
+						style={{ marginVertical: 15 }}
+						onPress={createGroupTrigger}
+					/>
+					<IconLabelButton
+						label="Join"
+						icon="plus"
+						style={{ marginVertical: 15 }}
+						onPress={joinToGroup}
+					/>
+				</View>
+			</SafeAreaView>
 		</>
 	);
 };

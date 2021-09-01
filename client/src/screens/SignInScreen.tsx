@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import HeaderView from '../containers/HeaderView';
 import Logo from '../assets/logo.svg';
@@ -8,6 +8,8 @@ import { IconLabelButton, LabelButton } from '../components/Buttons';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import tw from 'tailwind-react-native-classnames';
 import useLogin from '../hooks/useLogin';
+import { Title } from '../components/Texts';
+import globStyles from '../styles';
 
 const SignInScreen = () => {
 	const { dark } = useStoreState(state => state.theme);
@@ -21,20 +23,20 @@ const SignInScreen = () => {
 				<Logo style={{ marginVertical: 50 }} width={128} height={128} />
 				<ThemeSwitcher style={styles.themeSwitcherIcon} />
 			</HeaderView>
-			<View style={{ padding: 15, alignItems: 'center' }}>
+			<SafeAreaView
+				style={[tw`justify-center items-center`, globStyles.container]}>
+				<Title style={tw`absolute font-normal top-1`}>Sign in</Title>
 				<IconLabelButton
 					label="With Google"
-					theme={theme}
 					icon="google"
 					onPress={() => loginWith('google')}
 				/>
 				<IconLabelButton
 					label="With Facebook"
-					theme={theme}
 					icon="facebook"
 					onPress={() => loginWith('facebook')}
 				/>
-			</View>
+			</SafeAreaView>
 		</>
 	);
 };
