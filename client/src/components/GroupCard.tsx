@@ -21,10 +21,8 @@ const GroupCard = ({ name, members, onPress }: GroupCardProps) => {
 				{ backgroundColor: theme.colors.card },
 			]}>
 			<View>
-				<SubTitle theme={theme} style={tw`mt-0`}>
-					{name}
-				</SubTitle>
-				<Label theme={theme}>{`${members} member(s)`}</Label>
+				<SubTitle style={tw`mt-0`}>{name}</SubTitle>
+				<Label>{`${members} member(s)`}</Label>
 			</View>
 			<LabelButton label="View" style={tw`m-0 p-0`} onPress={onPress} />
 		</View>

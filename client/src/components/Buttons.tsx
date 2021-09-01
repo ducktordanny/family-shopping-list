@@ -6,7 +6,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { Theme } from '@react-navigation/native';
+import { Theme, useTheme } from '@react-navigation/native';
 import colors from '../theme/colors';
 
 interface ButtonProps {
@@ -27,17 +27,17 @@ import { Icons } from '../types/Icons';
 import Icon from './Icon';
 
 interface IconLabelButtonProps extends ButtonProps {
-	theme: Theme;
 	icon: Icons;
 }
 
 export const IconLabelButton = ({
 	label,
-	theme,
 	icon,
 	style,
 	onPress,
 }: IconLabelButtonProps) => {
+	const theme = useTheme();
+
 	return (
 		<TouchableOpacity onPress={onPress}>
 			<View

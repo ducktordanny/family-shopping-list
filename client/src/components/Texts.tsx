@@ -1,30 +1,41 @@
 import React from 'react';
 import { TextStyle, Text, StyleSheet } from 'react-native';
-import { Theme } from '@react-navigation/native';
+import { Theme, useTheme } from '@react-navigation/native';
 
 interface TextProps {
-	theme: Theme;
 	children?: React.ReactNode;
 	style?: TextStyle;
 }
 
-export const Title = ({ theme, children, style }: TextProps) => (
-	<Text style={[styles.title, { color: theme.colors.text }, style]}>
-		{children}
-	</Text>
-);
+export const Title = ({ children, style }: TextProps) => {
+	const theme = useTheme();
 
-export const SubTitle = ({ theme, children, style }: TextProps) => (
-	<Text style={[styles.subTitle, { color: theme.colors.text }, style]}>
-		{children}
-	</Text>
-);
+	return (
+		<Text style={[styles.title, { color: theme.colors.text }, style]}>
+			{children}
+		</Text>
+	);
+};
 
-export const Label = ({ theme, children, style }: TextProps) => (
-	<Text style={[styles.label, { color: theme.colors.text }, style]}>
-		{children}
-	</Text>
-);
+export const SubTitle = ({ children, style }: TextProps) => {
+	const theme = useTheme();
+
+	return (
+		<Text style={[styles.subTitle, { color: theme.colors.text }, style]}>
+			{children}
+		</Text>
+	);
+};
+
+export const Label = ({ children, style }: TextProps) => {
+	const theme = useTheme();
+
+	return (
+		<Text style={[styles.label, { color: theme.colors.text }, style]}>
+			{children}
+		</Text>
+	);
+};
 
 const styles = StyleSheet.create({
 	title: {

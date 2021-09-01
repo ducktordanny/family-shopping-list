@@ -3,8 +3,8 @@ import { View, ActivityIndicator } from 'react-native';
 import tw from 'tailwind-react-native-classnames';
 
 const Loading = () => (
-	<View style={tw`h-full justify-center items-center`}>
-		<ActivityIndicator size="large" />
+	<View style={tw`flex-auto justify-center items-center`}>
+		<ActivityIndicator size="large" style={tw`m-8`} />
 	</View>
 );
 
