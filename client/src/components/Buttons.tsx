@@ -1,17 +1,23 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, View } from 'react-native';
+import {
+	TouchableOpacity,
+	Text,
+	StyleSheet,
+	View,
+	ViewStyle,
+} from 'react-native';
 import { Theme } from '@react-navigation/native';
 import colors from '../theme/colors';
 
 interface ButtonProps {
 	label: string;
-	theme: Theme;
+	style?: ViewStyle;
 	onPress?: () => void;
 }
 
-export const LabelButton = ({ label, theme, onPress }: ButtonProps) => (
-	<TouchableOpacity onPress={() => onPress && onPress()}>
-		<View style={styles.buttonContainer}>
+export const LabelButton = ({ label, style, onPress }: ButtonProps) => (
+	<TouchableOpacity onPress={onPress}>
+		<View style={[styles.buttonContainer, style]}>
 			<Text style={styles.buttonLabel}>{label}</Text>
 		</View>
 	</TouchableOpacity>
@@ -21,6 +27,7 @@ import { Icons } from '../types/Icons';
 import Icon from './Icon';
 
 interface IconLabelButtonProps extends ButtonProps {
+	theme: Theme;
 	icon: Icons;
 }
 
@@ -28,14 +35,16 @@ export const IconLabelButton = ({
 	label,
 	theme,
 	icon,
+	style,
 	onPress,
 }: IconLabelButtonProps) => {
 	return (
-		<TouchableOpacity onPress={() => onPress && onPress()}>
+		<TouchableOpacity onPress={onPress}>
 			<View
 				style={[
 					styles.buttonContainer,
 					{ backgroundColor: theme.colors.card },
+					style,
 				]}>
 				<Icon icon={icon} />
 				<Text style={[styles.buttonLabel, { paddingLeft: 5 }]}>{label}</Text>
