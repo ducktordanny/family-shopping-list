@@ -5,7 +5,7 @@ import API, { getHeaders } from './';
 
 const useCreateGroup = (token: string | undefined) => {
 	const createGroup = async (
-		groupName: string
+		groupName: string,
 	): Promise<GroupProps | undefined> => {
 		try {
 			if (token === undefined) throw new Error('User not logged in.');
@@ -15,17 +15,11 @@ const useCreateGroup = (token: string | undefined) => {
 				{
 					name: groupName,
 				},
-				getHeaders(token)
+				getHeaders(token),
 			);
-			const {
-				_id: id,
-				userIds,
-				createdBy,
-				name,
-				createdAt,
-			} = response.data;
+			const { _id, userIds, createdBy, name, createdAt } = response.data;
 			return {
-				id,
+				_id,
 				userIds,
 				createdBy,
 				name,

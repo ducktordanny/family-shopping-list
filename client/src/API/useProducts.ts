@@ -3,9 +3,11 @@ import axios from 'axios';
 
 import API, { getHeaders } from './';
 import ProductProps from '../types/ProductProps';
+import GroupProps from '../types/GroupProps';
 
 const useProducts = (token: string | undefined, groupId: string | null) => {
 	const [products, setProducts] = useState<ProductProps[] | null>(null);
+	const [groupInfo, setGroupInfo] = useState<GroupProps | null>(null);
 
 	useEffect(() => {
 		const getProducts = async () => {
@@ -13,14 +15,20 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 				if (token === undefined) throw new Error('User not logged in.');
 				if (groupId === null) throw new Error('Group id is null.');
 
-				const response = await axios.get(
+				const groupResponse = await axios.get(
+					`${API}/groups/id/${groupId}`,
+					getHeaders(token),
+				);
+				setGroupInfo(groupResponse.data[0]);
+
+				const productsResponse = await axios.get(
 					`${API}/products/group/${groupId}`,
 					getHeaders(token),
 				);
 
-				if (response.data.length === 0) setProducts([]);
+				if (productsResponse.data.length === 0) setProducts([]);
 				else {
-					response.data.forEach((element: any) => {
+					productsResponse.data.forEach((element: any) => {
 						const prod: ProductProps = element;
 
 						setProducts(current =>
@@ -43,7 +51,7 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 		);
 	};
 
-	return [products, addProduct] as const;
+	return [products, groupInfo, addProduct] as const;
 };
 
 export default useProducts;

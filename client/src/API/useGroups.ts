@@ -4,10 +4,7 @@ import axios from 'axios';
 import API, { getHeaders } from './';
 import GroupProps from '../types/GroupProps';
 
-const useGetGroups = (
-	userId: string | undefined,
-	token: string | undefined,
-) => {
+const useGroups = (userId: string | undefined, token: string | undefined) => {
 	const [groups, setGroups] = useState<GroupProps[] | null>(null);
 
 	useEffect(() => {
@@ -48,4 +45,4 @@ const useGetGroups = (
 	return [groups, addGroup] as const;
 };
 
-export default useGetGroups;
+export default useGroups;
