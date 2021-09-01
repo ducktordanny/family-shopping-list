@@ -54,11 +54,22 @@ router.get('/:userId', async (req, res) => {
 	}
 });
 
+router.get('/id/:groupId', async (req, res) => {
+	try {
+		const group = await Group.find({ _id: req.params.groupId },
+			['_id', 'userIds', 'createdBy', 'name', 'createdAt']);
+		res.json(group);
+	} catch (err) {
+		res.status(444).send({ message: err.message });
+	}
+});
+
 /**
- * if a user authenticated then he/she can joing to a group (with a give group id)
+ * if a user authenticated then he/she can joing to a group (with a given group id)
  */
 router.patch('/join/:groupId', async (req, res, next) => {
 	try {
+		console.log('IN');
 		const { groupId } = req.params;
 		const userId = req.user._id;
 
@@ -68,12 +79,13 @@ router.patch('/join/:groupId', async (req, res, next) => {
 		);
 
 		if (response.nModified === 0) {
-			res.sendStatus(304);
+			res.status(400).json('You\'re already a member of this group.');
 		} else {
-			res.sendStatus(200);
+			const groupResponse = await Group.findById(groupId);
+			res.json(groupResponse);
 		}
 	} catch (err) {
-		next(err.message);
+		next(err);
 	}
 });
 
