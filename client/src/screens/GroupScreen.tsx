@@ -19,6 +19,8 @@ import { Label, SubTitle, Title } from '../components/Texts';
 import Icon from '../components/Icon';
 import { LabelButton } from '../components/Buttons';
 import globStyles from '../styles';
+import ProductCard from '../components/ProductCard';
+import GoBackIcon from '../components/GoBackIcon';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Group'>;
 type GroupScreenNavigationProp = Props['navigation'];
@@ -27,21 +29,22 @@ type GroupScreenRouteProp = Props['route'];
 const GroupScreen = () => {
 	const { groupId } = useRoute<GroupScreenRouteProp>().params;
 	const navigation = useNavigation<GroupScreenNavigationProp>();
-	const theme = useTheme();
 	const { token } = useStoreState(state => state.user);
 	const [products, groupInfo, _addProduct] = useProducts(token, groupId);
 
-	useEffect(() => {
-		console.log(products);
-	}, [products, groupInfo]);
+	const navigateToMembers = () => {
+		if (groupInfo === null) return undefined;
+		navigation.navigate('GroupMembers', {
+			name: groupInfo.name,
+			members: groupInfo.members,
+		});
+	};
 
 	return (
 		<>
 			<HeaderView>
-				<View style={tw`flex-row justify-between`}>
-					<TouchableOpacity onPress={() => navigation.goBack()}>
-						<Icon icon="arrow" width={20} height={20} />
-					</TouchableOpacity>
+				<View style={tw`flex-row justify-between items-center`}>
+					<GoBackIcon />
 					<Title style={tw`m-0`}>{groupInfo?.name}</Title>
 					<TouchableOpacity onPress={() => console.log('Hello World')}>
 						<Icon icon="menu" />
@@ -49,10 +52,14 @@ const GroupScreen = () => {
 				</View>
 				<View style={tw`items-center`}>
 					<SubTitle>Creator</SubTitle>
-					<Label>{groupInfo?.createdBy}</Label>
+					<Label>{groupInfo?.createdBy.name}</Label>
 					<SubTitle>Created at</SubTitle>
 					<Label>{new Date(groupInfo?.createdAt || '').toDateString()}</Label>
-					<LabelButton label="See members" style={tw`pb-0 mb-0`} />
+					<LabelButton
+						label="See members"
+						style={tw`pb-0 mb-0`}
+						onPress={navigateToMembers}
+					/>
 				</View>
 			</HeaderView>
 			<SafeAreaView style={[tw`justify-between`, globStyles.container]}>
@@ -62,19 +69,14 @@ const GroupScreen = () => {
 							style={{ paddingTop: 15, paddingHorizontal: 15, width: '100%' }}
 							data={products}
 							renderItem={({ item }) => (
-								// TODO: Make it's own component
-								<View
-									style={[
-										tw`text-center bg-white rounded-xl`,
-										{
-											backgroundColor: theme.colors.card,
-											marginBottom: 15,
-											paddingHorizontal: 20,
-											paddingVertical: 15,
-										},
-									]}>
-									<Label style={tw`m-0`}>{item.content}</Label>
-								</View>
+								<ProductCard
+									content={item.content}
+									important={item.important}
+									addedBy={item.addedBy.name}
+									createdAt={item.createdAt}
+									boughtBy={item.boughtBy?.name || null}
+									boughtAt={item.boughtAt || null}
+								/>
 							)}
 							keyExtractor={item => item._id}
 						/>

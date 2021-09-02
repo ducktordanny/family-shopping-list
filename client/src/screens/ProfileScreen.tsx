@@ -1,6 +1,5 @@
 import React from 'react';
 import { SafeAreaView, FlatList, View, Image, Alert } from 'react-native';
-import { useTheme } from '@react-navigation/native';
 import { useNavigation } from '@react-navigation/native';
 import { useStoreState } from '../hooks/storeTypedHooks';
 
@@ -31,7 +30,6 @@ const ProfileScreen = () => {
 	const [groups, addGroup] = useGroups(user.id, user.token);
 	const createGroup = useCreateGroup(user.token);
 	const joinTo = useJoin(user.token);
-	const theme = useTheme();
 
 	const createGroupTrigger = () => {
 		Alert.prompt('The name of the new group:', undefined, [
@@ -74,7 +72,6 @@ const ProfileScreen = () => {
 	};
 
 	const navigateTo = (groupId: string) => {
-		console.log(groupId);
 		navigation.navigate('Group', { groupId });
 	};
 
