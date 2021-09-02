@@ -1,4 +1,5 @@
 const express = require('express');
+const { getGroupById } = require('../controller/groups');
 const router = express.Router();
 const Group = require('../models/Group');
 
@@ -44,7 +45,7 @@ router.get('/all', async (req, res, next) => {
 /**
  * find all groups where the give user is included
  */
-router.get('/:userId', async (req, res) => {
+router.get('/user/:userId', async (req, res) => {
 	try {
 		const groups = await Group.find({ userIds: req.params.userId },
 			['_id', 'userIds', 'createdBy', 'name', 'createdAt']);
@@ -54,13 +55,13 @@ router.get('/:userId', async (req, res) => {
 	}
 });
 
-router.get('/id/:groupId', async (req, res) => {
+router.get('/:groupId', async (req, res, next) => {
 	try {
-		const group = await Group.find({ _id: req.params.groupId },
-			['_id', 'userIds', 'createdBy', 'name', 'createdAt']);
-		res.json(group);
+		const response = await getGroupById(req.params.groupId);
+		console.log(response);
+		res.json(response);
 	} catch (err) {
-		res.status(444).send({ message: err.message });
+		next(err.message);
 	}
 });
 
