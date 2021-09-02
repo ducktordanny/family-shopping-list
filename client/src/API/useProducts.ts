@@ -3,11 +3,11 @@ import axios from 'axios';
 
 import API, { getHeaders } from './';
 import ProductProps from '../types/ProductProps';
-import GroupProps from '../types/GroupProps';
+import { GroupPropsWithUsers } from '../types/GroupProps';
 
 const useProducts = (token: string | undefined, groupId: string | null) => {
 	const [products, setProducts] = useState<ProductProps[] | null>(null);
-	const [groupInfo, setGroupInfo] = useState<GroupProps | null>(null);
+	const [groupInfo, setGroupInfo] = useState<GroupPropsWithUsers | null>(null);
 
 	useEffect(() => {
 		const getProducts = async () => {
@@ -16,10 +16,10 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 				if (groupId === null) throw new Error('Group id is null.');
 
 				const groupResponse = await axios.get(
-					`${API}/groups/id/${groupId}`,
+					`${API}/groups/${groupId}`,
 					getHeaders(token),
 				);
-				setGroupInfo(groupResponse.data[0]);
+				setGroupInfo(groupResponse.data);
 
 				const productsResponse = await axios.get(
 					`${API}/products/group/${groupId}`,
