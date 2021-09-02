@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { useTheme } from '@react-navigation/native';
 import { SubTitle, Label } from './Texts';
 import { LabelButton } from './Buttons';
+import globStyles from '../styles';
 import tw from 'tailwind-react-native-classnames';
 
 export interface GroupCardProps {
@@ -16,8 +17,8 @@ const GroupCard = ({ name, members, onPress }: GroupCardProps) => {
 	return (
 		<View
 			style={[
-				tw`flex-row justify-between items-center rounded-xl`,
-				styles.container,
+				tw`flex-row justify-between items-center`,
+				globStyles.card,
 				{ backgroundColor: theme.colors.card },
 			]}>
 			<View>
@@ -28,13 +29,5 @@ const GroupCard = ({ name, members, onPress }: GroupCardProps) => {
 		</View>
 	);
 };
-
-const styles = StyleSheet.create({
-	container: {
-		marginBottom: 15,
-		paddingHorizontal: 20,
-		paddingVertical: 15,
-	},
-});
 
 export default GroupCard;
