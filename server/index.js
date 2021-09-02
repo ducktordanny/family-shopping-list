@@ -36,5 +36,12 @@ app.use('/users', authToken, require('./routes/users'));
 app.use('/groups', authToken, require('./routes/groups'));
 app.use('/products', authToken, require('./routes/product'));
 
+// error handling
+// eslint-disable-next-line
+app.use((err, req, res, next) => {
+	res.status(err.status || 500);
+	res.json(err);
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
