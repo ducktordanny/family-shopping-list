@@ -143,7 +143,6 @@
 			children = (
 			);
 			name = Resources;
-			path = "";
 			sourceTree = "<group>";
 		};
 		B90021E2AD0FF4E64A281E12 /* Pods */ = {
