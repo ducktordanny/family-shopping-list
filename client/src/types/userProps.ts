@@ -9,7 +9,7 @@ interface User {
 }
 
 export interface UserWithLessData {
-	_id: string;
+	_id?: string;
 	name: string;
 	picture: string;
 }

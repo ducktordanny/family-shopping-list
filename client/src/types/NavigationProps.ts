@@ -1,3 +1,4 @@
+import ProductProps from './ProductProps';
 import { UserWithLessData } from './UserProps';
 
 export type RootStackParamList = {
@@ -9,5 +10,9 @@ export type RootStackParamList = {
 	GroupMembers: {
 		name: string;
 		members: UserWithLessData[];
+	};
+	Product: {
+		groupName: string;
+		product: ProductProps;
 	};
 };
