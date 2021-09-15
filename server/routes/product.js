@@ -65,7 +65,9 @@ router.patch('/bought/:productId', async (req, res, next) => {
 	try {
 		const { productId } = req.params;
 		await Product.findOneAndUpdate({ _id: productId }, { boughtBy: req.user._id, boughtAt: new Date() });
-		const response = await Product.findById(productId);
+		const prod = await Product.findById(productId);
+		const response = await getUsersForProduct(prod);
+
 		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
@@ -79,7 +81,8 @@ router.patch('/unbought/:productId', async (req, res, next) => {
 	try {
 		const { productId } = req.params;
 		await Product.findOneAndUpdate({ _id: productId }, { boughtBy: null, boughtAt: null });
-		const response = await Product.findById(productId);
+		const prod = await Product.findById(productId);
+		const response = await getUsersForProduct(prod);
 		res.status(200).json(response);
 	} catch (err) {
 		next(err.message);
