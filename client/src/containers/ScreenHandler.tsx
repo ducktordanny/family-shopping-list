@@ -13,6 +13,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import GroupScreen from '../screens/GroupScreen';
 import { RootStackParamList } from '../types/NavigationProps';
 import GroupMembersScreen from '../screens/GroupMembersScreen';
+import ProductScreen from '../screens/ProductScreen';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -42,6 +43,11 @@ const ScreenHandler = () => {
 						<Stack.Screen
 							name="GroupMembers"
 							component={GroupMembersScreen}
+							options={{ headerShown: false }}
+						/>
+						<Stack.Screen
+							name="Product"
+							component={ProductScreen}
 							options={{ headerShown: false }}
 						/>
 					</>

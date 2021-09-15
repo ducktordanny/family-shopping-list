@@ -45,7 +45,7 @@ const ProfileScreen = () => {
 							addGroup(newGroup);
 						}
 					} catch (err) {
-						console.log('Create group:', err.message);
+						console.log('Create group:', err);
 					}
 				},
 			},
