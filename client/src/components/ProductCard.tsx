@@ -9,6 +9,7 @@ import tw from 'tailwind-react-native-classnames';
 import colors from '../theme/colors';
 
 export interface ProductCardProps {
+	id: string;
 	content: string;
 	important?: boolean;
 	addedBy: string;
@@ -17,16 +18,19 @@ export interface ProductCardProps {
 	boughtBy?: string | null;
 	/** If it's not null then it should be marked as bought. */
 	boughtAt?: Date | null;
-	onPress?: () => void;
+	onCheck?: (groupId: string, isChecked: boolean) => void;
+	onPress?: (groupId: string) => void;
 }
 
 const ProductCard = ({
+	id,
 	content,
 	important,
 	addedBy,
 	createdAt,
 	boughtBy,
 	boughtAt,
+	onCheck,
 	onPress,
 }: ProductCardProps) => {
 	const [isChecked, setIsChecked] = useState<boolean>(
@@ -37,11 +41,6 @@ const ProductCard = ({
 	useEffect(() => {
 		setIsChecked(boughtBy !== null && boughtAt !== null);
 	}, [boughtBy, boughtAt]);
-
-	const handleCheckboxChecking = () => {
-		// TODO: API handling
-		setIsChecked(current => !current);
-	};
 
 	return (
 		<View
@@ -64,14 +63,14 @@ const ProductCard = ({
 				}}
 				fillColor={colors.buttonLabel}
 				isChecked={isChecked}
-				onPress={handleCheckboxChecking}
+				onPress={() => onCheck && onCheck(id, isChecked)}
 			/>
 			<View style={tw`flex-1`}>
 				<SubTitle style={tw`mt-0`}>{content}</SubTitle>
 				{boughtBy !== null && boughtAt !== null ? (
 					<>
 						<Label>Bought by {boughtBy}</Label>
-						<Label>At {boughtAt}</Label>
+						<Label>At {new Date(boughtAt || '').toDateString()}</Label>
 					</>
 				) : (
 					<>
@@ -80,7 +79,11 @@ const ProductCard = ({
 					</>
 				)}
 			</View>
-			<LabelButton label="View" style={tw`m-0 p-0`} onPress={onPress} />
+			<LabelButton
+				label="View"
+				style={tw`m-0 p-0`}
+				onPress={() => onPress && onPress(id)}
+			/>
 		</View>
 	);
 };
