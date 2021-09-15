@@ -44,14 +44,13 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 		getProducts();
 	}, [token, groupId]);
 
-	// TODO: finish this part and use it after API response
 	const addProduct = (newProduct: ProductProps) => {
 		setProducts(current =>
 			current !== null ? [newProduct, ...current] : [newProduct],
 		);
 	};
 
-	return [products, groupInfo, addProduct] as const;
+	return { products, groupInfo, addProduct, setProducts } as const;
 };
 
 export default useProducts;

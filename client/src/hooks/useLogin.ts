@@ -34,7 +34,7 @@ const useLogin = () => {
 
 				// set status logged in true:
 				setIsLogged(true);
-			} catch (err) {
+			} catch (err: any) {
 				console.error(
 					`Something went wrong during login. Message: ${err.message}`,
 				);
