@@ -9,10 +9,10 @@
 -   [x] Design idea: at the button rounded buttons one with an arrow icon named Groups (back to groups) and one with a plusz icon named Create/Add
 -   [x] Finish GroupSettingsScreen and ProductDetailsScreen design.
 -   [x] Fix design. Components, SafeArea etc.
--   [ ] Update README.
--   [ ] ~~ Header with profile picture and if you click on it then it navigates to your profile. ~~
--   [ ] CHECK useRoute() AT REACT NAVIGATION
--   [ ] GroupDetaulsScreen could consist of two parts:
+-   [x] Update README.
+-   [x] CHECK useRoute() AT REACT NAVIGATION
+-   [x] ~~ Header with profile picture and if you click on it then it navigates to your profile. ~~
+-   [ ] GroupDetailsScreen could consist of two parts:
     -   Top: Group info (who created, when created, rename, leave group, delete group (only the creator))
     -   Bottom: added products
 -   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...).
@@ -25,8 +25,13 @@
 -   [x] React Navigation for Stacks.
 -   [x] Research for views.
 -   [x] Validation for new group etc.
--   [ ] Deal with device rotation.
+-   [x] Deal with device rotation (should block it).
+    -   [x] android
+    -   [x] ios
+-   [ ] Fix Android Studio somehow...
 -   [ ] Should add ErrorHandling Component to client side.
+-   [ ] Finish configuring with react-navigation in android.
+    -   [ ] Test it.
 
 ## For later:
 
