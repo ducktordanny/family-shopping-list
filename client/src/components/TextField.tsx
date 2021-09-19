@@ -13,12 +13,20 @@ const TextField = (props: TextFieldProps) => {
 	return (
 		<>
 			{props.upperLabel !== undefined && (
-				<Label style={{ margin: 0, paddingHorizontal: 10, paddingBottom: 5 }}>
+				<Label style={{ margin: 0, paddingHorizontal: 10 }}>
 					{props.upperLabel}
 				</Label>
 			)}
 			<TextInput
-				style={[styles.textfield, { borderColor: theme.colors.border }]}
+				style={[
+					styles.textfield,
+					{
+						marginVertical: 5,
+						borderColor: theme.colors.border,
+						color: theme.colors.text,
+					},
+				]}
+				placeholderTextColor={theme.dark ? '#888' : undefined}
 				{...props}
 			/>
 		</>

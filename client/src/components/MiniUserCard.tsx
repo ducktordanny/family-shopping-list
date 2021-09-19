@@ -12,7 +12,12 @@ const MiniUserCard = ({ name, picture }: UserWithLessData) => {
 		<View
 			style={[
 				tw`flex flex-row items-center justify-center border rounded-lg`,
-				{ paddingVertical: 5, paddingHorizontal: 10, marginVertical: 10 },
+				{
+					paddingVertical: 5,
+					paddingHorizontal: 10,
+					marginVertical: 10,
+					borderColor: theme.colors.text,
+				},
 			]}>
 			<Image
 				style={[
@@ -21,7 +26,6 @@ const MiniUserCard = ({ name, picture }: UserWithLessData) => {
 						width: 25,
 						height: 25,
 						marginRight: 10,
-						borderColor: theme.colors.border,
 					},
 				]}
 				source={{ uri: picture }}
