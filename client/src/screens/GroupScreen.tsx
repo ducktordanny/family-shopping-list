@@ -24,6 +24,7 @@ import GoBackIcon from '../components/GoBackIcon';
 import API, { getHeaders } from '../API';
 import axios from 'axios';
 import Clipboard from '@react-native-community/clipboard';
+import MiniUserCard from '../components/MiniUserCard';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Group'>;
 type GroupScreenNavigationProp = Props['navigation'];
@@ -120,7 +121,12 @@ const GroupScreen = () => {
 				</View>
 				<View style={tw`items-center`}>
 					<SubTitle>Creator</SubTitle>
-					<Label>{groupInfo?.createdBy.name || '...'}</Label>
+					{groupInfo !== null && (
+						<MiniUserCard
+							name={groupInfo.createdBy.name}
+							picture={groupInfo.createdBy.picture}
+						/>
+					)}
 					<SubTitle>Created at</SubTitle>
 					<Label>
 						{groupInfo?.createdAt

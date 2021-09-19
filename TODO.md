@@ -28,8 +28,11 @@
 -   [x] Deal with device rotation (should block it).
     -   [x] android
     -   [x] ios
--   [ ] Fix Android Studio somehow...
+-   [x] Fix MiniUserCard: the border is not changing on dark mode.
+-   [x] Fix TextField: the placeholder's color is not changing on dark mode.
+-   [ ] Fix KeyboardAvoidingView: When the KeyboardAvoidingView is the conatainer of a screen then only the scrollable part is moving up.
 -   [ ] Should add ErrorHandling Component to client side.
+-   [ ] Fix Android Studio somehow...
 -   [ ] Finish configuring with react-navigation in android.
     -   [ ] Test it.
 
