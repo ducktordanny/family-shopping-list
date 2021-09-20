@@ -16,6 +16,7 @@ import MiniUserCard from '../components/MiniUserCard';
 import TextField from '../components/TextField';
 import globStyles from '../styles';
 import tw from 'tailwind-react-native-classnames';
+import { LabelButton } from '../components/Buttons';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Product'>;
 type ProductScreenRouteProp = Props['route'];
@@ -35,43 +36,42 @@ const ProductScreen = () => {
 					<SubTitle style={{ marginTop: 10 }}>{product.content}</SubTitle>
 				</View>
 			</HeaderView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-				style={{ flex: 1 }}>
-				<SafeAreaView style={tw`justify-between`}>
-					<ScrollView style={[globStyles.card, { marginBottom: 0 }]}>
-						<View style={tw`items-center`}>
-							<SubTitle style={tw`m-0`}>Added</SubTitle>
-							<MiniUserCard
-								name={product.addedBy.name}
-								picture={product.addedBy.picture}
-							/>
-							<Label style={tw`m-0`}>
-								{new Date(product.createdAt || '').toDateString()}
-							</Label>
-							{product.boughtAt !== null && product.boughtBy && (
-								<>
-									<SubTitle>Bought</SubTitle>
-									<MiniUserCard
-										name={product.boughtBy.name}
-										picture={product.boughtBy.picture}
-									/>
-									<Label style={tw`m-0`}>
-										{new Date(product.boughtAt || '').toDateString()}
-									</Label>
-								</>
-							)}
-						</View>
-						<SubTitle style={tw`m-0`}>Edit</SubTitle>
-						<Label>
-							Hello World this is something what doesn't mean anything...
+			<SafeAreaView style={[tw`justify-between`, globStyles.container]}>
+				<ScrollView style={globStyles.card}>
+					<View style={tw`items-center`}>
+						<SubTitle style={tw`m-0`}>Added</SubTitle>
+						<MiniUserCard
+							name={product.addedBy.name}
+							picture={product.addedBy.picture}
+						/>
+						<Label style={tw`m-0`}>
+							{new Date(product.createdAt || '').toDateString()}
 						</Label>
-						<TextField placeholder="Test" />
-						<TextField placeholder="Test" />
-						<View style={{ height: 60 }}></View>
-					</ScrollView>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+						{product.boughtAt !== null && product.boughtBy && (
+							<>
+								<SubTitle>Bought</SubTitle>
+								<MiniUserCard
+									name={product.boughtBy.name}
+									picture={product.boughtBy.picture}
+								/>
+								<Label style={tw`m-0`}>
+									{new Date(product.boughtAt || '').toDateString()}
+								</Label>
+							</>
+						)}
+						<SubTitle>Edit</SubTitle>
+						<LabelButton style={tw`p-0`} label="Product name" />
+						<LabelButton
+							style={tw`p-0`}
+							label={
+								product.important
+									? 'Remove important mark'
+									: 'Mark as important'
+							}
+						/>
+					</View>
+				</ScrollView>
+			</SafeAreaView>
 		</>
 	);
 };

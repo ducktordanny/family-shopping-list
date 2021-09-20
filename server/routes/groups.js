@@ -58,7 +58,6 @@ router.get('/user/:userId', async (req, res) => {
 router.get('/:groupId', async (req, res, next) => {
 	try {
 		const response = await getGroupById(req.params.groupId);
-		console.log(response);
 		res.json(response);
 	} catch (err) {
 		next(err.message);
@@ -70,7 +69,6 @@ router.get('/:groupId', async (req, res, next) => {
  */
 router.patch('/join/:groupId', async (req, res, next) => {
 	try {
-		console.log('IN');
 		const { groupId } = req.params;
 		const userId = req.user._id;
 

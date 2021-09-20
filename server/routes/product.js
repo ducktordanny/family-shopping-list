@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const {
-	getProductByGroupIdWithUsers, getProductById,
+	getProductByGroupIdWithUsers, getProductById, toggleImportantStatus,
 
 } = require('../controller/product');
 const { getUsersForProduct } = require('../controller/users');
@@ -53,6 +53,26 @@ router.get('/group/:groupId', async (req, res, next) => {
 		const response = await getProductByGroupIdWithUsers(groupId);
 
 		res.status(200).json(response);
+	} catch (err) {
+		next(err.message);
+	}
+});
+
+router.patch('/important/toggle/:productId', async (req, res, next) => {
+	try {
+		const { productId } = req.params;
+		await toggleImportantStatus(productId);
+		res.json({ msg: 'Success' });
+	} catch (err) {
+		next(err.message);
+	}
+});
+
+// TODO: it would be much easier on both the server and client side than making two separated routes for this...
+router.patch('/bought/toggle/:productId', async (req, res, next) => {
+	try {
+		// TODO: should make a controller...
+		res.json({ msg: 'Hello World...' });
 	} catch (err) {
 		next(err.message);
 	}

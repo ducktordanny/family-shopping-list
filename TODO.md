@@ -35,6 +35,7 @@
 -   [ ] Fix Android Studio somehow...
 -   [ ] Finish configuring with react-navigation in android.
     -   [ ] Test it.
+-   [ ] Should add a refresh button and also update product screen style.
 
 ## For later:
 
