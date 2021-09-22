@@ -7,13 +7,13 @@ const useJoin = (token: string | undefined) => {
 			if (token === undefined) throw new Error('User not logged in.');
 			if (groupId === undefined) throw new Error('Invalid group ID.');
 			const response = await axios.patch(
-				`${API}/groups/join/${groupId}`,
+				API(`/groups/join/${groupId}`),
 				undefined,
 				getHeaders(token),
 			);
 
 			return response.data;
-		} catch (err) {
+		} catch (err: any) {
 			if (err.response?.data) {
 				console.error(err.response.data);
 			}

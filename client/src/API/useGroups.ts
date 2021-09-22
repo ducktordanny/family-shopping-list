@@ -14,7 +14,7 @@ const useGroups = (userId: string | undefined, token: string | undefined) => {
 					throw new Error('User not logged in.');
 
 				const response = await axios.get(
-					`${API}/groups/user/${userId}`,
+					API(`/groups/user/${userId}`),
 					getHeaders(token),
 				);
 

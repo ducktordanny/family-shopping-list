@@ -11,7 +11,7 @@ const useCreateGroup = (token: string | undefined) => {
 			if (token === undefined) throw new Error('User not logged in.');
 
 			const response = await axios.post(
-				`${API}/groups/create`,
+				API(`/groups/create`),
 				{
 					name: groupName,
 				},

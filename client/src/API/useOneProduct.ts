@@ -10,12 +10,11 @@ const useOneProduct = (token: string | undefined, productId: string | null) => {
 	const getOneProduct = async () => {
 		try {
 			if (token === undefined) throw new Error('Token is not specified');
-			if (productId === null)
-				throw new Error('Product id is not specified.');
+			if (productId === null) throw new Error('Product id is not specified.');
 
 			const response = await axios.get(
-				`${API}/products/${productId}`,
-				getHeaders(token)
+				API(`/products/${productId}`),
+				getHeaders(token),
 			);
 
 			const {
