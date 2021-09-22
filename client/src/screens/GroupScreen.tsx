@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import {
 	FlatList,
 	View,
 	SafeAreaView,
 	TouchableOpacity,
 	Alert,
+	RefreshControl,
 } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -34,25 +35,29 @@ const GroupScreen = () => {
 	const { groupId } = useRoute<GroupScreenRouteProp>().params;
 	const navigation = useNavigation<GroupScreenNavigationProp>();
 	const { token } = useStoreState(state => state.user);
-	const { products, groupInfo, setProducts, addProduct } = useProducts(
-		token,
-		groupId,
-	);
+	const {
+		products,
+		groupInfo,
+		setProducts,
+		addProduct,
+		refreshing,
+		refreshProducts,
+	} = useProducts(token, groupId);
 
 	const navigateToMembers = () => {
 		if (groupInfo === null) return undefined;
 		navigation.navigate('GroupMembers', {
+			productId: groupInfo._id,
 			name: groupInfo.name,
-			members: groupInfo.members,
 		});
 	};
 
 	const navigateToProduct = (id: string) => {
-		// TODO: we should include the followings: product: ProductProps, groupName: string
 		if (!groupInfo || !products) return undefined;
-		const product = products.find(element => element._id === id);
-		if (!product) return undefined;
-		navigation.navigate('Product', { groupName: groupInfo?.name, product });
+		navigation.navigate('Product', {
+			groupName: groupInfo?.name,
+			productId: id,
+		});
 	};
 
 	const checkProduct = async (id: string, isChecked: boolean) => {
@@ -146,6 +151,12 @@ const GroupScreen = () => {
 						<FlatList
 							style={{ paddingTop: 15, paddingHorizontal: 15, width: '100%' }}
 							data={products}
+							refreshControl={
+								<RefreshControl
+									refreshing={refreshing}
+									onRefresh={refreshProducts}
+								/>
+							}
 							renderItem={({ item }) => (
 								<ProductCard
 									id={item._id}
