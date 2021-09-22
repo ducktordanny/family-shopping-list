@@ -1,5 +1,5 @@
 const express = require('express');
-const { getGroupById } = require('../controller/groups');
+const { getGroupById, getMembersById } = require('../controller/groups');
 const router = express.Router();
 const Group = require('../models/Group');
 
@@ -37,6 +37,19 @@ router.get('/all', async (req, res, next) => {
 	try {
 		const groups = await Group.find();
 		res.json(groups);
+	} catch (err) {
+		next(err.message);
+	}
+});
+
+/**
+ * get all users by a group id
+ */
+router.get('/members/:groupId', async (req, res, next) => {
+	try {
+		const { groupId } = req.params;
+		const result = await getMembersById(groupId);
+		res.json(result);
 	} catch (err) {
 		next(err.message);
 	}
