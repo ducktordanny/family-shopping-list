@@ -17,7 +17,7 @@ const useToken = () => {
 		try {
 			const token = await getItem();
 			if (token !== null) {
-				const response = await axios.get(`${API}/token`, {
+				const response = await axios.get(API(`/token`), {
 					headers: {
 						Authorization: `Bearer ${token}`,
 						'Content-Type': 'application/json',

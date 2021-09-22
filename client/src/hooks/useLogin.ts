@@ -57,7 +57,7 @@ const useLogin = () => {
 	}, []);
 
 	const loginWith = (provider: 'google' | 'facebook') =>
-		openUrl(`${API}/auth/${provider}`);
+		openUrl(API(`/auth/${provider}`));
 
 	const openUrl = (url: string) => {
 		if (Platform.OS === 'ios') {
