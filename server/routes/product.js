@@ -61,6 +61,7 @@ router.get('/group/:groupId', async (req, res, next) => {
 router.patch('/important/toggle/:productId', async (req, res, next) => {
 	try {
 		const { productId } = req.params;
+		// ? Do we really need a separated controller for this ?
 		await toggleImportantStatus(productId);
 		res.json({ msg: 'Success' });
 	} catch (err) {
@@ -69,9 +70,10 @@ router.patch('/important/toggle/:productId', async (req, res, next) => {
 });
 
 // TODO: it would be much easier on both the server and client side than making two separated routes for this...
+// ! If more user click on the button at the sam time it could cause some weird issues (e.g. if two user mark it as bought, but they "toggle" each other so the product isn't gonna be bought)
 router.patch('/bought/toggle/:productId', async (req, res, next) => {
 	try {
-		// TODO: should make a controller...
+		// TODO: should make a controller...?
 		res.json({ msg: 'Hello World...' });
 	} catch (err) {
 		next(err.message);
