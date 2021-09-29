@@ -26,6 +26,7 @@ import API, { getHeaders } from '../API';
 import axios from 'axios';
 import Clipboard from '@react-native-community/clipboard';
 import MiniUserCard from '../components/MiniUserCard';
+import ThemedRefreshControl from '../components/ThemedRefreshControl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Group'>;
 type GroupScreenNavigationProp = Props['navigation'];
@@ -90,7 +91,7 @@ const GroupScreen = () => {
 				onPress: async content => {
 					try {
 						const newProduct = await axios.post(
-							`${API}/products/create`,
+							API(`/products/create`),
 							{
 								groupId,
 								content,
@@ -98,8 +99,9 @@ const GroupScreen = () => {
 							getHeaders(token || ''),
 						);
 						addProduct(newProduct.data);
-					} catch (err) {
+					} catch (err: any) {
 						console.log(err);
+						console.log(err.message);
 					}
 				},
 			},
@@ -152,7 +154,7 @@ const GroupScreen = () => {
 							style={{ paddingTop: 15, paddingHorizontal: 15, width: '100%' }}
 							data={products}
 							refreshControl={
-								<RefreshControl
+								<ThemedRefreshControl
 									refreshing={refreshing}
 									onRefresh={refreshProducts}
 								/>
