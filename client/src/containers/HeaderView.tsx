@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { ReactNode } from 'react';
 import {
 	SafeAreaView,
 	View,
@@ -7,35 +7,24 @@ import {
 	ViewStyle,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import colors from '../theme/colors';
+import { default as globColors } from '../theme/colors';
 
 export interface HeaderViewProps {
-	/** Colors of the gradient background. */
+	children: ReactNode;
 	colors?: string[];
 	style?: StyleProp<ViewStyle>;
 }
 
-/**
- * Returns a styled View where you can set an array of colors to give its background
- * a linear gradient. If no colors are specified then it uses the default colors.
- * Tip: Use it at the top since it's a 'header'.
- */
-class HeaderView extends Component<HeaderViewProps> {
-	render() {
-		return (
-			<LinearGradient
-				colors={this.props.colors || colors.header}
-				style={styles.mainContainer}
-				shouldRasterizeIOS>
-				<SafeAreaView>
-					<View style={[styles.contentContainer, this.props.style]}>
-						{this.props.children}
-					</View>
-				</SafeAreaView>
-			</LinearGradient>
-		);
-	}
-}
+const HeaderView = ({ children, colors, style }: HeaderViewProps) => (
+	<LinearGradient
+		colors={colors || globColors.header}
+		style={styles.mainContainer}
+		shouldRasterizeIOS>
+		<SafeAreaView>
+			<View style={[styles.contentContainer, style]}>{children}</View>
+		</SafeAreaView>
+	</LinearGradient>
+);
 
 const styles = StyleSheet.create({
 	mainContainer: {

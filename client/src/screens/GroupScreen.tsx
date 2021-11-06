@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
 	FlatList,
 	View,
 	SafeAreaView,
 	TouchableOpacity,
 	Alert,
-	RefreshControl,
 } from 'react-native';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/NavigationProps';
-import { useNavigation, useRoute, useTheme } from '@react-navigation/native';
+import {
+	useIsFocused,
+	useNavigation,
+	useRoute,
+} from '@react-navigation/native';
 import useProducts from '../API/useProducts';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import Loading from '../components/Loading';
@@ -35,6 +38,7 @@ type GroupScreenRouteProp = Props['route'];
 const GroupScreen = () => {
 	const { groupId } = useRoute<GroupScreenRouteProp>().params;
 	const navigation = useNavigation<GroupScreenNavigationProp>();
+	const isFocused = useIsFocused();
 	const { token } = useStoreState(state => state.user);
 	const {
 		products,
@@ -44,6 +48,11 @@ const GroupScreen = () => {
 		refreshing,
 		refreshProducts,
 	} = useProducts(token, groupId);
+
+	useEffect(() => {
+		if (!isFocused) return undefined;
+		refreshProducts(false);
+	}, [isFocused]);
 
 	const navigateToMembers = () => {
 		if (groupInfo === null) return undefined;
@@ -56,6 +65,7 @@ const GroupScreen = () => {
 	const navigateToProduct = (id: string) => {
 		if (!groupInfo || !products) return undefined;
 		navigation.navigate('Product', {
+			groupId,
 			groupName: groupInfo?.name,
 			productId: id,
 		});
@@ -65,7 +75,7 @@ const GroupScreen = () => {
 		if (products === null) return undefined;
 		try {
 			const response = await axios.patch(
-				`${API}/products/${isChecked ? 'unbought' : 'bought'}/${id}`,
+				API(`/products/${isChecked ? 'unbought' : 'bought'}/${id}`),
 				undefined,
 				getHeaders(token || ''),
 			);
@@ -92,10 +102,7 @@ const GroupScreen = () => {
 					try {
 						const newProduct = await axios.post(
 							API(`/products/create`),
-							{
-								groupId,
-								content,
-							},
+							{ groupId, content },
 							getHeaders(token || ''),
 						);
 						addProduct(newProduct.data);

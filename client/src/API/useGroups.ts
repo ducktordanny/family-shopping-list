@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 import API, { getHeaders } from './';
@@ -6,33 +6,30 @@ import GroupProps from '../types/GroupProps';
 
 const useGroups = (userId: string | undefined, token: string | undefined) => {
 	const [groups, setGroups] = useState<GroupProps[] | null>(null);
+	const [refreshing, setRefreshing] = useState<boolean>(false);
+
+	const getGroups = async () => {
+		try {
+			if (token === undefined || userId === undefined)
+				throw new Error('User not found.');
+
+			const response = await axios.get(
+				API(`/groups/user/${userId}`),
+				getHeaders(token!),
+			);
+
+			if (response.data.length === 0) setGroups([]);
+			else {
+				setGroups(response.data.reverse());
+			}
+		} catch (err) {
+			console.log('HERE');
+			console.log(err);
+		}
+	};
 
 	useEffect(() => {
-		const getGroups = async () => {
-			try {
-				if (userId === undefined || token === undefined)
-					throw new Error('User not logged in.');
-
-				const response = await axios.get(
-					API(`/groups/user/${userId}`),
-					getHeaders(token),
-				);
-
-				if (response.data.length === 0) setGroups([]);
-				else {
-					response.data.forEach((element: any) => {
-						const group: GroupProps = element;
-
-						setGroups(current =>
-							current !== null ? [group, ...current] : [group],
-						);
-					});
-				}
-			} catch (err) {
-				console.log(err);
-			}
-		};
-		setGroups(null);
+		console.log('First getting groups');
 		getGroups();
 	}, [userId, token]);
 
@@ -42,7 +39,15 @@ const useGroups = (userId: string | undefined, token: string | undefined) => {
 		);
 	};
 
-	return [groups, addGroup] as const;
+	/**
+	 * @param showRefresh Settings whether it should show the refreshing or not...
+	 */
+	const refreshGroups = useCallback((showRefresh: boolean = true) => {
+		setRefreshing(showRefresh);
+		getGroups().then(() => setRefreshing(false));
+	}, []);
+
+	return { groups, addGroup, refreshing, refreshGroups };
 };
 
 export default useGroups;

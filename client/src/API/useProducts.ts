@@ -12,8 +12,9 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 
 	const getProducts = async () => {
 		try {
-			if (token === undefined) throw new Error('User not logged in.');
-			if (groupId === null) throw new Error('Group id is null.');
+			if (token === undefined)
+				throw new Error('[useProducts]: User not logged in.');
+			if (groupId === null) throw new Error('[useProducts]: Group id is null.');
 
 			const groupResponse = await axios.get(
 				API(`/groups/${groupId}`),
@@ -36,9 +37,8 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 	};
 
 	useEffect(() => {
-		setProducts(null);
 		getProducts();
-	}, [token, groupId]);
+	}, []);
 
 	const addProduct = (newProduct: ProductProps) => {
 		setProducts(current =>
@@ -46,9 +46,12 @@ const useProducts = (token: string | undefined, groupId: string | null) => {
 		);
 	};
 
-	const refreshProducts = useCallback(() => {
-		setRefreshing(true);
-		setTimeout(() => getProducts().then(() => setRefreshing(false)), 250);
+	/**
+	 * @param showRefresh Settings whether it should show the refreshing or not...
+	 */
+	const refreshProducts = useCallback((showRefresh: boolean = true) => {
+		setRefreshing(showRefresh);
+		getProducts().then(() => setRefreshing(false));
 	}, []);
 
 	return {

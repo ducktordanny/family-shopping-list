@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, SafeAreaView, FlatList } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, SafeAreaView, FlatList, RefreshControl } from 'react-native';
 import { UserWithLessData } from '../types/UserProps';
 import HeaderView from '../containers/HeaderView';
 import GoBackIcon from '../components/GoBackIcon';
@@ -13,6 +13,7 @@ import axios from 'axios';
 import API, { getHeaders } from '../API';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import Loading from '../components/Loading';
+import ThemedRefreshControl from '../components/ThemedRefreshControl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupMembers'>;
 type GroupMembersScreenRouteProp = Props['route'];
@@ -21,18 +22,25 @@ const GroupMembersScreen = () => {
 	const { productId, name } = useRoute<GroupMembersScreenRouteProp>().params;
 	const token = useStoreState(state => state.user.token);
 	const [members, setMembers] = useState<UserWithLessData[] | null>(null);
+	const [refreshing, setRefreshing] = useState<boolean>(false);
 
 	// TODO: refactor: maybe we should make a hook for this
+	const getMembers = async () => {
+		if (token === undefined) return;
+		const response = await axios.get(
+			API(`/groups/members/${productId}`),
+			getHeaders(token),
+		);
+		setMembers(response.data);
+	};
+
 	useEffect(() => {
-		const getMembers = async () => {
-			if (token === undefined) return;
-			const response = await axios.get(
-				API(`/groups/members/${productId}`),
-				getHeaders(token),
-			);
-			setMembers(response.data);
-		};
 		getMembers();
+	}, []);
+
+	const refreshMembers = useCallback(() => {
+		setRefreshing(true);
+		setTimeout(() => getMembers().then(() => setRefreshing(false)), 250);
 	}, []);
 
 	return (
@@ -49,6 +57,12 @@ const GroupMembersScreen = () => {
 						data={members}
 						renderItem={({ item }) => <UserCard user={item} />}
 						keyExtractor={item => item._id!}
+						refreshControl={
+							<ThemedRefreshControl
+								refreshing={refreshing}
+								onRefresh={refreshMembers}
+							/>
+						}
 					/>
 				) : (
 					<Loading />

@@ -14,6 +14,7 @@ import GroupScreen from '../screens/GroupScreen';
 import { RootStackParamList } from '../types/NavigationProps';
 import GroupMembersScreen from '../screens/GroupMembersScreen';
 import ProductScreen from '../screens/ProductScreen';
+import useThemeProvider from '../hooks/useThemeProvider';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -22,8 +23,7 @@ const ScreenHandler = () => {
 	const { dark } = useStoreState(state => state.theme);
 
 	useToken();
-
-	// TODO: Fix the navigate type definition when using useNavigation (docs)
+	useThemeProvider();
 
 	return (
 		<NavigationContainer theme={dark ? DarkTheme : LightTheme}>

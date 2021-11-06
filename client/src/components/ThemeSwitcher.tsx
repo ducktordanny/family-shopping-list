@@ -3,6 +3,7 @@ import { TouchableOpacity, ViewStyle } from 'react-native';
 import ToLightMode from '../assets/to-light-mode.svg';
 import ToDarkMode from '../assets/to-dark-mode.svg';
 import { useStoreActions, useStoreState } from '../hooks/storeTypedHooks';
+import { useAsyncStorage } from '@react-native-async-storage/async-storage';
 
 export interface ThemeSwitcherProps {
 	style?: ViewStyle;
@@ -10,12 +11,12 @@ export interface ThemeSwitcherProps {
 
 const ThemeSwitcher = ({ style }: ThemeSwitcherProps) => {
 	const { dark } = useStoreState(state => state.theme);
+	const { setItem } = useAsyncStorage('@theme');
 	const { setDark } = useStoreActions(state => state.theme);
 
-	const handleThemeSwitch = () => {
+	const handleThemeSwitch = async () => {
+		await setItem(dark ? 'dark' : 'light');
 		setDark(!dark);
-		// TODO: implement theme mode changing
-		console.log(`Should change theme to ${dark ? 'dark' : 'light'}.`);
 	};
 
 	return (

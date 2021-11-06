@@ -9,6 +9,7 @@ export type RootStackParamList = {
 		name: string;
 	};
 	Product: {
+		groupId: string;
 		groupName: string;
 		productId: string;
 	};

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, FlatList, View, Image, Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useStoreState } from '../hooks/storeTypedHooks';
 
 import globStyles from '../styles';
@@ -20,6 +20,7 @@ import Loading from '../components/Loading';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/NavigationProps';
 import useJoin from '../API/useJoin';
+import ThemedRefreshControl from '../components/ThemedRefreshControl';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 type ProfileScreenNavigationProp = Props['navigation'];
@@ -27,9 +28,18 @@ type ProfileScreenNavigationProp = Props['navigation'];
 const ProfileScreen = () => {
 	const navigation = useNavigation<ProfileScreenNavigationProp>();
 	const user = useStoreState(state => state.user);
-	const [groups, addGroup] = useGroups(user.id, user.token);
+	const isFocused = useIsFocused();
+	const { groups, addGroup, refreshing, refreshGroups } = useGroups(
+		user.id,
+		user.token,
+	);
 	const createGroup = useCreateGroup(user.token);
 	const joinTo = useJoin(user.token);
+
+	useEffect(() => {
+		if (!isFocused) return undefined;
+		refreshGroups(false);
+	}, [isFocused]);
 
 	const createGroupTrigger = () => {
 		Alert.prompt('The name of the new group:', undefined, [
@@ -114,6 +124,12 @@ const ProfileScreen = () => {
 								/>
 							)}
 							keyExtractor={item => item._id}
+							refreshControl={
+								<ThemedRefreshControl
+									refreshing={refreshing}
+									onRefresh={refreshGroups}
+								/>
+							}
 						/>
 					) : (
 						<Label style={{ textAlign: 'center', paddingTop: 15 }}>
