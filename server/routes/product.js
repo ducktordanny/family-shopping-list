@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../models/Product');
 const {
-	getProductByGroupIdWithUsers, getProductById, toggleImportantStatus,
+	getProductByGroupIdWithUsers, getProductById, toggleImportantStatus, renameProductById,
 
 } = require('../controller/product');
 const { getUsersForProduct } = require('../controller/users');
@@ -53,6 +53,16 @@ router.get('/group/:groupId', async (req, res, next) => {
 		const response = await getProductByGroupIdWithUsers(groupId);
 
 		res.status(200).json(response);
+	} catch (err) {
+		next(err.message);
+	}
+});
+
+router.patch('/rename', async (req, res, next) => {
+	try {
+		const { id, content } = req.body;
+		const response = await renameProductById(id, content);
+		res.json({ modified: !!response });
 	} catch (err) {
 		next(err.message);
 	}

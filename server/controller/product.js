@@ -22,6 +22,18 @@ const getProductByGroupIdWithUsers = async (id) => {
 };
 
 /**
+ * Renames the given product's content.
+ * @param {string} id 
+ * @param {string} newContent
+ */
+const renameProductById = async (id, content) => {
+	// should implement it...
+	console.log(id, content);
+	const response = await Product.updateOne({ _id: id }, { content });
+	return response.nModified;
+};
+
+/**
  * Toggles a product's important status and returns it.
  * @param {string} id 
  */
@@ -33,5 +45,6 @@ const toggleImportantStatus = async (id) => {
 module.exports = {
 	getProductById,
 	getProductByGroupIdWithUsers,
+	renameProductById,
 	toggleImportantStatus
 };
