@@ -12,7 +12,7 @@
 -   [x] Update README.
 -   [x] CHECK useRoute() AT REACT NAVIGATION
 -   [x] ~~ Header with profile picture and if you click on it then it navigates to your profile. ~~
--   [ ] GroupDetailsScreen could consist of two parts:
+-   [x] GroupDetailsScreen could consist of two parts:
     -   Top: Group info (who created, when created, rename, leave group, delete group (only the creator))
     -   Bottom: added products
 -   [ ] In authentication when we verify if a user is existing then we should just simply use User.findOrCreate(...).
@@ -30,12 +30,21 @@
     -   [x] ios
 -   [x] Fix MiniUserCard: the border is not changing on dark mode.
 -   [x] Fix TextField: the placeholder's color is not changing on dark mode.
--   [ ] Fix KeyboardAvoidingView: When the KeyboardAvoidingView is the conatainer of a screen then only the scrollable part is moving up.
--   [ ] Should add ErrorHandling Component to client side.
--   [ ] Fix Android Studio somehow...
+-   [ ] ~~Fix KeyboardAvoidingView: When the KeyboardAvoidingView is the conatainer of a screen then only the scrollable part is moving up.~~
+-   [ ] Should add ErrorHandling Component to client side. (maybe a simple alert?)
+-   [ ] Fix Android Studio somehow... :)
 -   [ ] Finish configuring with react-navigation in android.
     -   [ ] Test it.
--   [ ] Should add a refresh button and also update product screen style.
+-   [ ] ~~Should add a refresh button and also update product screen style.~~
+-   [ ] Should implement refreshing with RefreshControl (https://reactnative.dev/docs/refreshcontrol)
+    -   [x] Still implement it in group members.
+    -   [ ] Refresh the product list when we are going back (there might be some changes).
+        -   https://stackoverflow.com/questions/44223727/react-navigation-goback-and-update-parent-state
+        -   https://stackoverflow.com/questions/51723511/reload-screen-after-navigation-goback-in-react-native
+        -   https://reactnavigation.org/docs/use-is-focused/
+-   [x] Should test modified HeaderView.
+-   [ ] Should test fixed back navigation in ProductScreen.
+-   [ ] Should finish Layout implementation and separate screens for multiple components to have a nicer look.
 
 ## For later:
 
