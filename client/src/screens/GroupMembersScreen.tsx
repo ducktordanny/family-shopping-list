@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, SafeAreaView, FlatList, RefreshControl } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { UserWithLessData } from '../types/UserProps';
-import HeaderView from '../containers/HeaderView';
 import GoBackIcon from '../components/GoBackIcon';
 import { Title } from '../components/Texts';
 import tw from 'tailwind-react-native-classnames';
@@ -14,6 +13,7 @@ import API, { getHeaders } from '../API';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import Loading from '../components/Loading';
 import ThemedRefreshControl from '../components/ThemedRefreshControl';
+import Layout from '../containers/Layout';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'GroupMembers'>;
 type GroupMembersScreenRouteProp = Props['route'];
@@ -43,33 +43,36 @@ const GroupMembersScreen = () => {
 		setTimeout(() => getMembers().then(() => setRefreshing(false)), 250);
 	}, []);
 
-	return (
+	const headerContent = (
 		<>
-			<HeaderView style={tw`flex-row justify-between`}>
-				<GoBackIcon />
-				<Title style={tw`m-0`}>{name}</Title>
-				<View style={{ width: 20 }}></View>
-			</HeaderView>
-			<SafeAreaView style={tw`flex-1`}>
-				{members ? (
-					<FlatList
-						style={{ paddingTop: 15, paddingHorizontal: 15, width: '100%' }}
-						data={members}
-						renderItem={({ item }) => <UserCard user={item} />}
-						keyExtractor={item => item._id!}
-						refreshControl={
-							<ThemedRefreshControl
-								refreshing={refreshing}
-								onRefresh={refreshMembers}
-							/>
-						}
-					/>
-				) : (
-					<Loading />
-				)}
-			</SafeAreaView>
+			<GoBackIcon />
+			<Title style={tw`m-0`}>{name}</Title>
+			<View style={{ width: 20 }}></View>
 		</>
 	);
+
+	const bodyContent = (
+		<>
+			{members ? (
+				<FlatList
+					style={{ paddingTop: 15, paddingHorizontal: 15, width: '100%' }}
+					data={members}
+					renderItem={({ item }) => <UserCard user={item} />}
+					keyExtractor={item => item._id!}
+					refreshControl={
+						<ThemedRefreshControl
+							refreshing={refreshing}
+							onRefresh={refreshMembers}
+						/>
+					}
+				/>
+			) : (
+				<Loading />
+			)}
+		</>
+	);
+
+	return <Layout header={headerContent} body={bodyContent} />;
 };
 
 export default GroupMembersScreen;
