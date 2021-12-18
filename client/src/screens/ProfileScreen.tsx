@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, FlatList, View, Image, Alert } from 'react-native';
+import { FlatList, View, Image, Alert } from 'react-native';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useStoreState } from '../hooks/storeTypedHooks';
 
-import globStyles from '../styles';
-import HeaderView from '../containers/HeaderView';
 import tw from 'tailwind-react-native-classnames';
 import ThemeSwitcher from '../components/ThemeSwitcher';
 
@@ -21,6 +19,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/NavigationProps';
 import useJoin from '../API/useJoin';
 import ThemedRefreshControl from '../components/ThemedRefreshControl';
+import Layout from '../containers/Layout';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 type ProfileScreenNavigationProp = Props['navigation'];
@@ -85,77 +84,85 @@ const ProfileScreen = () => {
 		navigation.navigate('Group', { groupId });
 	};
 
-	return (
+	const headerContent = (
 		<>
-			<HeaderView style={tw`flex-row justify-between`}>
-				<Logout />
-				<View style={tw`items-center`}>
-					<Image
-						style={[tw`rounded-full`, { width: 60, height: 60 }]}
-						source={{
-							uri: user.picture || 'https://i.imgur.com/Yrz6oBC.png',
-						}}
-					/>
-					<Title>{user.name}</Title>
-					<Label>Logged in via {capitalizeFirst(user.provider || '')}</Label>
-					<Label>{user.email}</Label>
-					<SubTitle>Member since</SubTitle>
-					<Label>{new Date(user.createdAt || '').toDateString()}</Label>
-				</View>
-				<ThemeSwitcher style={tw`absolute top-0 right-0`} />
-			</HeaderView>
-
-			<SafeAreaView style={[tw`justify-between`, globStyles.container]}>
-				{groups !== null ? (
-					// if there was a group check:
-					groups?.length > 0 ? (
-						<FlatList
-							style={{
-								paddingTop: 15,
-								paddingHorizontal: 15,
-								width: '100%',
-							}}
-							data={groups}
-							renderItem={({ item }) => (
-								<GroupCard
-									name={item.name}
-									members={item.userIds.length}
-									onPress={() => navigateTo(item._id)}
-								/>
-							)}
-							keyExtractor={item => item._id}
-							refreshControl={
-								<ThemedRefreshControl
-									refreshing={refreshing}
-									onRefresh={refreshGroups}
-								/>
-							}
-						/>
-					) : (
-						<Label style={{ textAlign: 'center', paddingTop: 15 }}>
-							You have no groups...
-						</Label>
-					)
-				) : (
-					// waiting for checking if there are any groups
-					<Loading />
-				)}
-				<View style={tw`flex-row justify-center`}>
-					<IconLabelButton
-						label="Create group"
-						icon="plus"
-						style={{ marginVertical: 15 }}
-						onPress={createGroupTrigger}
-					/>
-					<IconLabelButton
-						label="Join"
-						icon="plus"
-						style={{ marginVertical: 15 }}
-						onPress={joinToGroup}
-					/>
-				</View>
-			</SafeAreaView>
+			<Logout />
+			<View style={tw`items-center`}>
+				<Image
+					style={[tw`rounded-full`, { width: 60, height: 60 }]}
+					source={{
+						uri: user.picture || 'https://i.imgur.com/Yrz6oBC.png',
+					}}
+				/>
+				<Title>{user.name}</Title>
+				<Label>Logged in via {capitalizeFirst(user.provider || '')}</Label>
+				<Label>{user.email}</Label>
+				<SubTitle>Member since</SubTitle>
+				<Label>{new Date(user.createdAt || '').toDateString()}</Label>
+			</View>
+			<ThemeSwitcher style={tw`absolute top-0 right-0`} />
 		</>
+	);
+
+	const bodyContent = (
+		<>
+			{groups !== null ? (
+				// if there was a group check:
+				groups?.length > 0 ? (
+					<FlatList
+						style={{
+							paddingTop: 15,
+							paddingHorizontal: 15,
+							width: '100%',
+						}}
+						data={groups}
+						renderItem={({ item }) => (
+							<GroupCard
+								name={item.name}
+								members={item.userIds.length}
+								onPress={() => navigateTo(item._id)}
+							/>
+						)}
+						keyExtractor={item => item._id}
+						refreshControl={
+							<ThemedRefreshControl
+								refreshing={refreshing}
+								onRefresh={refreshGroups}
+							/>
+						}
+					/>
+				) : (
+					<Label style={{ textAlign: 'center', paddingTop: 15 }}>
+						You have no groups...
+					</Label>
+				)
+			) : (
+				// waiting for checking if there are any groups
+				<Loading />
+			)}
+			<View style={tw`flex-row justify-center`}>
+				<IconLabelButton
+					label="Create group"
+					icon="plus"
+					style={{ marginVertical: 15 }}
+					onPress={createGroupTrigger}
+				/>
+				<IconLabelButton
+					label="Join"
+					icon="plus"
+					style={{ marginVertical: 15 }}
+					onPress={joinToGroup}
+				/>
+			</View>
+		</>
+	);
+
+	return (
+		<Layout
+			header={headerContent}
+			body={bodyContent}
+			headerStyle={tw`flex-row justify-between`}
+		/>
 	);
 };
 

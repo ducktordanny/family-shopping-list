@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, SafeAreaView, ScrollView, Alert } from 'react-native';
+import { View, ScrollView, Alert } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
-import HeaderView from '../containers/HeaderView';
 import GoBackIcon from '../components/GoBackIcon';
 import { RootStackParamList } from '../types/NavigationProps';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -16,6 +15,7 @@ import API, { getHeaders } from '../API';
 import Loading from '../components/Loading';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import ThemedRefreshControl from '../components/ThemedRefreshControl';
+import Layout from '../containers/Layout';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Product'>;
 type ProductScreenRouteProp = Props['route'];
@@ -100,81 +100,84 @@ const ProductScreen = () => {
 		]);
 	};
 
-	return (
+	const headerContent = (
 		<>
-			<HeaderView>
-				<View style={tw`flex-row items-center justify-between`}>
-					<GoBackIcon
-						onNavigation={() => groupNavigation.navigate('Group', { groupId })}
-					/>
-					<Title style={tw`m-0`}>{groupName}</Title>
-					<View style={{ width: 20 }}></View>
-				</View>
-				<View style={tw`items-center`}>
-					<SubTitle style={{ marginTop: 10 }}>
-						{product?.content || '...'}
-					</SubTitle>
-				</View>
-			</HeaderView>
-			<SafeAreaView style={[tw`justify-between`, globStyles.container]}>
-				<ScrollView
-					style={globStyles.card}
-					refreshControl={
-						<ThemedRefreshControl
-							refreshing={refreshing}
-							onRefresh={refreshProduct}
-						/>
-					}>
-					{product ? (
-						<View style={tw`items-center`}>
-							<SubTitle style={tw`m-0`}>Added</SubTitle>
-							<MiniUserCard
-								name={product.addedBy.name}
-								picture={product.addedBy.picture}
-							/>
-							<Label style={tw`m-0`}>
-								{new Date(product.createdAt || '').toDateString()}
-							</Label>
-							{product.boughtAt !== null && product.boughtBy && (
-								<>
-									<SubTitle>Bought</SubTitle>
-									<MiniUserCard
-										name={product.boughtBy.name}
-										picture={product.boughtBy.picture}
-									/>
-									<Label style={tw`m-0`}>
-										{new Date(product.boughtAt || '').toDateString()}
-									</Label>
-								</>
-							)}
-							<SubTitle>Edit</SubTitle>
-							<LabelButton
-								style={tw`p-0`}
-								label="Product name"
-								onPress={renamePrompt}
-							/>
-							<LabelButton
-								style={tw`p-0`}
-								label={
-									product.important
-										? 'Remove important mark'
-										: 'Mark as important'
-								}
-								onPress={toggleImportant}
-							/>
-							<IconLabelButton
-								label="Remove"
-								icon="crossed"
-								onPress={() => console.log('UwU remove me...')}
-							/>
-						</View>
-					) : (
-						<Loading />
-					)}
-				</ScrollView>
-			</SafeAreaView>
+			<View style={tw`flex-row items-center justify-between`}>
+				<GoBackIcon
+					onNavigation={() => groupNavigation.navigate('Group', { groupId })}
+				/>
+				<Title style={tw`m-0`}>{groupName}</Title>
+				<View style={{ width: 20 }}></View>
+			</View>
+			<View style={tw`items-center`}>
+				<SubTitle style={{ marginTop: 10 }}>
+					{product?.content || '...'}
+				</SubTitle>
+			</View>
 		</>
 	);
+
+	const bodyContent = (
+		<>
+			<ScrollView
+				style={globStyles.card}
+				refreshControl={
+					<ThemedRefreshControl
+						refreshing={refreshing}
+						onRefresh={refreshProduct}
+					/>
+				}>
+				{product ? (
+					<View style={tw`items-center`}>
+						<SubTitle style={tw`m-0`}>Added</SubTitle>
+						<MiniUserCard
+							name={product.addedBy.name}
+							picture={product.addedBy.picture}
+						/>
+						<Label style={tw`m-0`}>
+							{new Date(product.createdAt || '').toDateString()}
+						</Label>
+						{product.boughtAt !== null && product.boughtBy && (
+							<>
+								<SubTitle>Bought</SubTitle>
+								<MiniUserCard
+									name={product.boughtBy.name}
+									picture={product.boughtBy.picture}
+								/>
+								<Label style={tw`m-0`}>
+									{new Date(product.boughtAt || '').toDateString()}
+								</Label>
+							</>
+						)}
+						<SubTitle>Edit</SubTitle>
+						<LabelButton
+							style={tw`p-0`}
+							label="Product name"
+							onPress={renamePrompt}
+						/>
+						<LabelButton
+							style={tw`p-0`}
+							label={
+								product.important
+									? 'Remove important mark'
+									: 'Mark as important'
+							}
+							onPress={toggleImportant}
+						/>
+						<IconLabelButton
+							label="Remove"
+							icon="crossed"
+							onPress={() => console.log('UwU remove me...')}
+						/>
+					</View>
+				) : (
+					<Loading />
+				)}
+			</ScrollView>
+		</>
+	);
+
+	return <Layout header={headerContent} body={bodyContent} />;
 };
 
 export default ProductScreen;
