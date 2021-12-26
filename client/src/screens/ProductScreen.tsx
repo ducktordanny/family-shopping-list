@@ -8,7 +8,7 @@ import { Label, SubTitle, Title } from '../components/Texts';
 import MiniUserCard from '../components/MiniUserCard';
 import globStyles from '../styles';
 import tw from 'tailwind-react-native-classnames';
-import { IconLabelButton, LabelButton } from '../components/Buttons';
+import { LabelButton } from '../components/Buttons';
 import ProductProps from '../types/ProductProps';
 import axios from 'axios';
 import API, { getHeaders } from '../API';
@@ -70,6 +70,20 @@ const ProductScreen = () => {
 		}
 	};
 
+	const removeProduct = async () => {
+		try {
+			if (productId === undefined || token === undefined)
+				throw new Error('[ProductScreen] Token is undefined.');
+			await axios.delete(
+				API(`/products/remove/${productId}`),
+				getHeaders(token),
+			);
+			groupNavigation.navigate('Group', { groupId });
+		} catch (err: any) {
+			console.error(err);
+		}
+	};
+
 	const toggleImportant = async () => {
 		try {
 			const response = await axios.patch(
@@ -88,7 +102,7 @@ const ProductScreen = () => {
 		}
 	};
 
-	const renamePrompt = () => {
+	const renamePrompt = async () => {
 		Alert.prompt('Rename', 'Enter the new name of product', [
 			{ text: 'Cancel', style: 'destructive' },
 			{
@@ -101,6 +115,19 @@ const ProductScreen = () => {
 		]);
 	};
 
+	const removePromt = () => {
+		Alert.alert('Are you sure you want to remove this item?', undefined, [
+			{
+				text: 'Yes',
+				style: 'destructive',
+				onPress: async () => {
+					await removeProduct();
+				},
+			},
+			{ text: 'Cancel' },
+		]);
+	};
+
 	const headerContent = (
 		<>
 			<View style={tw`flex-row items-center justify-between`}>
@@ -108,7 +135,7 @@ const ProductScreen = () => {
 					onNavigation={() => groupNavigation.navigate('Group', { groupId })}
 				/>
 				<Title style={tw`m-0`}>{groupName}</Title>
-				<TouchableOpacity onPress={() => console.log('Delete...')}>
+				<TouchableOpacity onPress={removePromt}>
 					<Icon icon="crossed" width={20} height={20} />
 				</TouchableOpacity>
 			</View>

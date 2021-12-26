@@ -121,4 +121,14 @@ router.patch('/unbought/:productId', async (req, res, next) => {
 	}
 });
 
+router.delete('/remove/:productId', async (req, res, next) => {
+	try {
+		const { productId } = req.params;
+		await Product.deleteOne({ _id: productId });
+		res.status(200).json({ message: 'success' });
+	} catch (err) {
+		next(err.message);
+	}
+});
+
 module.exports = router;
