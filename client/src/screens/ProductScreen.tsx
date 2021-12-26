@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { View, ScrollView, Alert } from 'react-native';
+import { View, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/core';
 import GoBackIcon from '../components/GoBackIcon';
 import { RootStackParamList } from '../types/NavigationProps';
@@ -16,6 +16,7 @@ import Loading from '../components/Loading';
 import { useStoreState } from '../hooks/storeTypedHooks';
 import ThemedRefreshControl from '../components/ThemedRefreshControl';
 import Layout from '../containers/Layout';
+import Icon from '../components/Icon';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Product'>;
 type ProductScreenRouteProp = Props['route'];
@@ -107,7 +108,9 @@ const ProductScreen = () => {
 					onNavigation={() => groupNavigation.navigate('Group', { groupId })}
 				/>
 				<Title style={tw`m-0`}>{groupName}</Title>
-				<View style={{ width: 20 }}></View>
+				<TouchableOpacity onPress={() => console.log('Delete...')}>
+					<Icon icon="crossed" width={20} height={20} />
+				</TouchableOpacity>
 			</View>
 			<View style={tw`items-center`}>
 				<SubTitle style={{ marginTop: 10 }}>
@@ -163,11 +166,6 @@ const ProductScreen = () => {
 									: 'Mark as important'
 							}
 							onPress={toggleImportant}
-						/>
-						<IconLabelButton
-							label="Remove"
-							icon="crossed"
-							onPress={() => console.log('UwU remove me...')}
 						/>
 					</View>
 				) : (

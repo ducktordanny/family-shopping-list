@@ -6,7 +6,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import { Theme, useTheme } from '@react-navigation/native';
+import { useTheme } from '@react-navigation/native';
 import colors from '../theme/colors';
 
 interface ButtonProps {

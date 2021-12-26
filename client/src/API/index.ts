@@ -1,4 +1,6 @@
-export const API_URL: string = 'http://localhost:3000';
+export const API_URL: string = __DEV__
+	? 'http://localhost:3000'
+	: 'https://shrouplist.herokuapp.com';
 
 export const getHeaders = (token: string) => ({
 	headers: {
