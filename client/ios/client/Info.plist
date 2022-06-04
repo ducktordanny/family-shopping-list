@@ -29,7 +29,7 @@
 			<string>com.ducktordanny.family-shopping-list</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>family-shopping-list</string>
+				<string>shrouplist</string>
 			</array>
 		</dict>
 	</array>
@@ -44,6 +44,13 @@
 			<key>localhost</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+			<key>shrouplist.herokuapp.com</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+				<key>NSIncludesSubdomains</key>
 				<true/>
 			</dict>
 		</dict>

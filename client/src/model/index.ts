@@ -1,14 +1,14 @@
-import userModel, { UserModel } from './user';
-import themeModel, { ThemeModel } from './theme';
+import userModel, {UserModel} from './user';
+import themeModel, {ThemeModel} from './theme';
 
 export interface StoreModel {
-	user: UserModel;
-	theme: ThemeModel;
+  user: UserModel;
+  theme: ThemeModel;
 }
 
 const storeModel: StoreModel = {
-	user: userModel,
-	theme: themeModel,
+  user: userModel,
+  theme: themeModel,
 };
 
 export default storeModel;

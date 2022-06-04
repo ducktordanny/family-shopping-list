@@ -1,24 +1,24 @@
-import { useEffect } from 'react';
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { useStoreActions } from './storeTypedHooks';
+import {useEffect} from 'react';
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import {useStoreActions} from './storeTypedHooks';
 
 const useThemeProvider = () => {
-	const { getItem, setItem } = useAsyncStorage('@theme');
-	const { setDark } = useStoreActions(state => state.theme);
+  const {getItem, setItem} = useAsyncStorage('@theme');
+  const {setDark} = useStoreActions(state => state.theme);
 
-	const setTheme = async () => {
-		let storedTheme = await getItem();
+  const setTheme = async () => {
+    let storedTheme = await getItem();
 
-		if (storedTheme === null) {
-			setItem('dark');
-			storedTheme = 'dark';
-		}
-		setDark(storedTheme === 'dark');
-	};
+    if (storedTheme === null) {
+      setItem('dark');
+      storedTheme = 'dark';
+    }
+    setDark(storedTheme === 'dark');
+  };
 
-	useEffect(() => {
-		setTheme();
-	}, []);
+  useEffect(() => {
+    setTheme();
+  }, []);
 };
 
 export default useThemeProvider;

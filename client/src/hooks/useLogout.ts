@@ -1,28 +1,26 @@
-import { useAsyncStorage } from '@react-native-async-storage/async-storage';
-import { useStoreActions } from '../hooks/storeTypedHooks';
+import {useAsyncStorage} from '@react-native-async-storage/async-storage';
+import {useStoreActions} from './storeTypedHooks';
 
 const useLogout = () => {
-	const { removeItem } = useAsyncStorage('@user_token');
-	const { setToken, setUser, setIsLogged } = useStoreActions(
-		state => state.user,
-	);
+  const {removeItem} = useAsyncStorage('@user_token');
+  const {setToken, setUser, setIsLogged} = useStoreActions(state => state.user);
 
-	const logout = async () => {
-		setIsLogged(false);
-		await removeItem();
-		setToken(undefined);
-		setUser({
-			id: undefined,
-			clientId: undefined,
-			name: undefined,
-			email: undefined,
-			picture: undefined,
-			provider: undefined,
-			createdAt: undefined,
-		});
-	};
+  const logout = async () => {
+    setIsLogged(false);
+    await removeItem();
+    setToken(undefined);
+    setUser({
+      id: undefined,
+      clientId: undefined,
+      name: undefined,
+      email: undefined,
+      picture: undefined,
+      provider: undefined,
+      createdAt: undefined,
+    });
+  };
 
-	return logout;
+  return logout;
 };
 
 export default useLogout;
