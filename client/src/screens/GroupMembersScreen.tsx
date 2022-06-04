@@ -44,11 +44,11 @@ const GroupMembersScreen = () => {
   }, []);
 
   const headerContent = (
-    <>
+    <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
       <GoBackIcon />
       <Title style={tw`m-0`}>{name}</Title>
       <View style={{width: 20}}></View>
-    </>
+    </View>
   );
 
   const bodyContent = (
